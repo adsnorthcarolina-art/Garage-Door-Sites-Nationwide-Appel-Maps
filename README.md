@@ -26,3 +26,5 @@ Pages settings: Framework = None · Build command = *(empty)* · Build output di
 Then add each domain under Custom domains (both `domain.com` and `www.domain.com`).
 Free plan allows 100 custom domains per project, so the 109 domains are split across two projects
 that deploy the same repo.
+
+Deployed on Cloudflare Pages: project `garage-door-sites-nationwide-appel-maps`.
