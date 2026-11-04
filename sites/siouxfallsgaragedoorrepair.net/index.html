@@ -160,6 +160,15 @@ footer .legal{border-top:1px solid #3B4D5F;padding-top:1rem;display:flex;flex-wr
 .drawer .group{margin:1.1rem 0 .2rem .5rem;font-family:"Barlow Condensed";font-weight:700;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mist)}
 .drawer a.call{display:flex;justify-content:center;margin:1.5rem 0 1rem;border:0;color:var(--signal-ink);font-size:1.1rem}
 .drawer-note{color:var(--mist);font-size:.85rem;margin:0 .5rem}
+
+/* lead form */
+.lead{display:grid;gap:.9rem;max-width:34rem}
+.lead label{display:grid;gap:.3rem;font-weight:600;font-size:.95rem}
+.lead input,.lead select,.lead textarea{font:inherit;font-weight:400;padding:.7rem .8rem;border:2px solid var(--panel);border-radius:4px;background:var(--white);color:var(--ink);width:100%}
+.lead input:focus,.lead select:focus,.lead textarea:focus{outline:none;border-color:var(--signal)}
+.lead .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.lead button.call{border:0;cursor:pointer;font:inherit;font-weight:600;font-size:1.05rem;justify-content:center}
+.form-note{font-size:.9rem;color:var(--steel);margin:0}
 </style>
 <script type="application/ld+json">
 {
@@ -341,15 +350,35 @@ footer .legal{border-top:1px solid #3B4D5F;padding-top:1rem;display:flex;flex-wr
       <details><summary>Should I repair or replace my garage door?</summary><p>If the panels are sound and it's a spring, cable or opener problem, repair is almost always the better value. If several panels are damaged or the door is 20+ years old and uninsulated, we'll walk you through replacement options and prices on site.</p></details>
       <details><summary>What warranty do you give?</summary><p>5 years on springs and parts we install, 1 year on labor. New doors carry the manufacturer's warranty on top of ours.</p></details>
     </div>
-    <div class="contact" id="contact">
-      <h2>Contact</h2>
-      <dl>
-        <dt>Phone</dt><dd><a href="tel:+16053882442">605-388-2442</a></dd>
-        <dt>Address</dt><dd>600 N Main Ave, Suite 100<br>Sioux Falls, SD 57104</dd>
-        <dt>Hours</dt><dd>24 hours a day, 7 days a week</dd>
-        <dt>Service area</dt><dd>Sioux Falls and surrounding South Dakota communities</dd>
-      </dl>
-      <a class="call" href="tel:+16053882442">Call 605-388-2442</a>
+    <div id="contact">
+      <h2>Request a call back</h2>
+      <form class="lead" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="YOUR-WEB3FORMS-ACCESS-KEY">
+        <input type="hidden" name="subject" value="New lead — Sioux Falls Garage Door Repair (Sioux Falls, SD)">
+        <input type="hidden" name="from_name" value="Sioux Falls Garage Door Repair website">
+        <input type="hidden" name="site" value="siouxfallsgaragedoorrepair.net">
+        <input type="hidden" name="redirect" value="https://www.siouxfallsgaragedoorrepair.net/thank-you/">
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
+        <label>Your name<input type="text" name="name" required autocomplete="name"></label>
+        <label>Phone<input type="tel" name="phone" required autocomplete="tel" inputmode="tel"></label>
+        <label>Address or neighborhood in Sioux Falls<input type="text" name="address" autocomplete="street-address"></label>
+        <label>What's the door doing?
+          <select name="problem" required>
+            <option value="">Choose one</option>
+            <option>Won't open</option>
+            <option>Won't close</option>
+            <option>Stuck halfway / crooked</option>
+            <option>Loud bang — spring broke</option>
+            <option>Opener not working</option>
+            <option>Door off track</option>
+            <option>Want a new door / estimate</option>
+            <option>Something else</option>
+          </select>
+        </label>
+        <label>Anything else we should know?<textarea name="message" rows="3"></textarea></label>
+        <button class="call" type="submit">Request a call back</button>
+        <p class="form-note">We call back within minutes during the day. For an emergency, phone <a href="tel:+16053882442">605-388-2442</a>.</p>
+      </form>
     </div>
   </div>
 </section>

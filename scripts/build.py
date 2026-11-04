@@ -29,7 +29,9 @@ PAGES = {
     "service-areas": ("areas", "areas"),
     "about": ("about", "about"),
     "contact": ("contact", "contact"),
+    "thank-you": ("thankyou", "contact"),
 }
+FORM_KEY = (ROOT / "data" / "form_key.txt").read_text().strip() if (ROOT / "data" / "form_key.txt").exists() else "YOUR-WEB3FORMS-ACCESS-KEY"
 NAV_KEYS = ["home", "spring", "opener", "offtrack", "newdoor", "emergency", "areas", "blog", "about", "contact"]
 
 FAQ_SCHEMA = """<script type="application/ld+json">
@@ -184,6 +186,7 @@ def fields(loc):
         "phone": phone,
         "phone_digits": re.sub(r"\D", "", phone),
         "since": SINCE,
+        "form_key": FORM_KEY,
         "wiki": wiki_url(loc),
         "year": str(datetime.date.today().year),
         "nearby_inline": ", ".join(nearby[:-1]) + (" and " + nearby[-1] if len(nearby) > 1 else (nearby[0] if nearby else "the surrounding area")),
@@ -214,7 +217,7 @@ def render_page(slug, f):
         "page_desc": htmlmod.escape(sub(desc, f), quote=True),
         "path": path,
         "content": sub(body, f),
-        "schema_extra": sub(FAQ_SCHEMA, f) if slug == "" else "",
+        "schema_extra": (sub(FAQ_SCHEMA, f) if slug == "" else "") + ('<meta name="robots" content="noindex">' if slug == "thank-you" else ""),
     })
     for k in NAV_KEYS:
         pf[f"cur_{k}"] = 'aria-current="page"' if k == nav_key else ""
@@ -245,7 +248,8 @@ def build_site(loc, today):
         target = d / slug / "index.html" if slug else d / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(out)
-        urls.append(path)
+        if slug != "thank-you":
+            urls.append(path)
     (d / "robots.txt").write_text(ROBOTS.format(domain=f["domain"]))
     (d / "logo.svg").write_text(LOGO.format(city=htmlmod.escape(f["city"].upper()), since=f["since"], st=f["st"], cityc=htmlmod.escape(f["city"])))
     (d / "_redirects").write_text(REDIRECTS.format(domain=f["domain"]))
