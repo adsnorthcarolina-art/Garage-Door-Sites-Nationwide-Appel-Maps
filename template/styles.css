@@ -101,6 +101,9 @@ footer ul{list-style:none;padding:0;margin:0}
 footer li{padding:.2rem 0}
 footer a{color:#C9D3DD;text-decoration:none}
 footer a:hover{color:var(--white)}
+footer .pay{margin:0 0 1.5rem}
+footer .pay .brands{margin-top:.4rem}
+footer .pay .brands li{background:transparent;border-color:#3B4D5F;color:#C9D3DD;font-size:1rem;padding:.25rem .65rem}
 footer .legal{border-top:1px solid #3B4D5F;padding-top:1rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem 2rem}
 .sticky{display:none}
 @media (max-width:640px){
