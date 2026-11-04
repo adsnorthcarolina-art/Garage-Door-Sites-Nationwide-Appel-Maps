@@ -34,7 +34,8 @@ a{color:inherit}
 
 /* header */
 .top{background:var(--ink);color:var(--white)}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:76px}
+.top .wrap{display:flex;align-items:center;gap:1rem;min-height:76px}
+.top .brand{margin-right:auto}
 .brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--white)}
 .brand svg{width:44px;height:44px;flex:none}
 .brand .wm{line-height:1}
@@ -45,10 +46,6 @@ a{color:inherit}
 .call{display:inline-flex;align-items:center;gap:.6rem;background:var(--signal);color:var(--signal-ink);text-decoration:none;font-weight:600;padding:.7rem 1.1rem;border-radius:4px;white-space:nowrap}
 .call svg{width:18px;height:18px}
 .call:hover{background:#FFC61A}
-nav.main{background:#223040;color:#C9D3DD;font-weight:500;font-size:.95rem}
-nav.main .wrap{display:flex;flex-wrap:wrap;gap:0 1.6rem;min-height:44px;align-items:center}
-nav.main a{text-decoration:none;padding:.6rem 0}
-nav.main a:hover,nav.main a[aria-current]{color:var(--white);box-shadow:inset 0 -3px 0 var(--signal)}
 
 /* hero */
 .hero{background:var(--ink);color:var(--white);padding:3.5rem 0 0}
@@ -143,6 +140,26 @@ footer .legal{border-top:1px solid #3B4D5F;padding-top:1rem;display:flex;flex-wr
 .prose p{color:var(--ink)}
 .svc h3 a{text-decoration:none}
 .svc h3 a:hover{border-bottom:3px solid var(--signal)}
+
+/* hamburger + drawer */
+.burger{display:inline-flex;flex-direction:column;justify-content:center;gap:5px;width:46px;height:46px;padding:0 10px;background:transparent;border:2px solid #3B4D5F;border-radius:4px;cursor:pointer}
+.burger span{display:block;height:3px;background:var(--white);border-radius:2px}
+.burger:hover{border-color:var(--signal)}
+.scrim{position:fixed;inset:0;background:rgba(27,39,51,.55);z-index:20;opacity:0;transition:opacity .2s}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(340px,88vw);z-index:21;background:var(--ink);color:var(--white);overflow-y:auto;padding:0 1.25rem 2rem;transform:translateX(100%);transition:transform .22s ease;box-shadow:-8px 0 30px rgba(0,0,0,.35)}
+.drawer[hidden],.scrim[hidden]{display:none}
+.menu-open .scrim{opacity:1}
+.menu-open .drawer{transform:none}
+@media (prefers-reduced-motion:reduce){.drawer,.scrim{transition:none}}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;min-height:76px;font-family:"Barlow Condensed";font-weight:700;font-size:1.5rem;text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid #3B4D5F;margin-bottom:.5rem}
+.drawer .close{background:transparent;border:2px solid #3B4D5F;color:var(--white);width:42px;height:42px;border-radius:4px;font-size:1.6rem;line-height:1;cursor:pointer}
+.drawer .close:hover{border-color:var(--signal)}
+.drawer a{display:block;padding:.75rem .5rem;text-decoration:none;font-weight:500;font-size:1.05rem;border-bottom:1px solid #2B3A49;color:#E6EAEE}
+.drawer a:hover{color:var(--signal)}
+.drawer a[aria-current]{color:var(--signal);box-shadow:inset 4px 0 0 var(--signal);padding-left:.9rem}
+.drawer .group{margin:1.1rem 0 .2rem .5rem;font-family:"Barlow Condensed";font-weight:700;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mist)}
+.drawer a.call{display:flex;justify-content:center;margin:1.5rem 0 1rem;border:0;color:var(--signal-ink);font-size:1.1rem}
+.drawer-note{color:var(--mist);font-size:.85rem;margin:0 .5rem}
 </style>
 <script type="application/ld+json">
 {
@@ -179,21 +196,30 @@ footer .legal{border-top:1px solid #3B4D5F;padding-top:1rem;display:flex;flex-wr
       <span class="wm"><b><em>Huntington</em> Garage Door Repair</b><small>Since 2004 · Huntington, WV · 24 hours</small></span>
     </a>
     <a class="call" href="tel:+13042479957"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.7a2 2 0 0 1 1.7 2z"/></svg><span>304-247-9957</span></a>
+    <button class="burger" type="button" aria-controls="menu" aria-expanded="false" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
 </header>
-<nav class="main" aria-label="Main">
-  <div class="wrap">
-    <a href="/" >Home</a>
-    <a href="/garage-door-spring-repair/" >Springs</a>
-    <a href="/garage-door-opener-repair/" >Openers</a>
-    <a href="/garage-door-off-track-repair/" >Off track</a>
-    <a href="/new-garage-door-installation/" >New doors</a>
-    <a href="/emergency-garage-door-repair/" >Emergency</a>
-    <a href="/service-areas/" >Service areas</a>
-    <a href="/blog/" aria-current="page">Blog</a>
-    <a href="/about/" >About</a>
-    <a href="/contact/" >Contact</a>
+<div class="scrim" hidden></div>
+<nav class="drawer" id="menu" aria-label="Main" hidden>
+  <div class="drawer-head">
+    <span>Menu</span>
+    <button class="close" type="button" aria-label="Close menu">×</button>
   </div>
+  <a href="/" >Home</a>
+  <p class="group">Services</p>
+  <a href="/garage-door-spring-repair/" >Spring repair</a>
+  <a href="/garage-door-opener-repair/" >Opener repair &amp; installation</a>
+  <a href="/garage-door-off-track-repair/" >Off-track door repair</a>
+  <a href="/new-garage-door-installation/" >New garage doors</a>
+  <a href="/emergency-garage-door-repair/" >24-hour emergency repair</a>
+  <p class="group">Company</p>
+  <a href="/service-areas/" >Service areas</a>
+  <a href="/blog/" aria-current="page">Blog</a>
+  <a href="/about/" >About us</a>
+  <a href="/contact/" >Contact</a>
+  <a href="/#faq">Common questions</a>
+  <a class="call" href="tel:+13042479957">Call 304-247-9957</a>
+  <p class="drawer-note">Open 24 hours · 555 5th Ave, Suite F, Huntington, WV 25701</p>
 </nav>
 
 <main>
@@ -284,6 +310,13 @@ footer .legal{border-top:1px solid #3B4D5F;padding-top:1rem;display:flex;flex-wr
     </div>
   </div>
 </footer>
+<script>
+(function(){var b=document.querySelector('.burger'),m=document.getElementById('menu'),sc=document.querySelector('.scrim'),c=m.querySelector('.close');
+function open(){m.hidden=false;sc.hidden=false;requestAnimationFrame(function(){document.body.classList.add('menu-open')});b.setAttribute('aria-expanded','true');c.focus()}
+function close(){document.body.classList.remove('menu-open');b.setAttribute('aria-expanded','false');setTimeout(function(){m.hidden=true;sc.hidden=true},220);b.focus()}
+b.addEventListener('click',open);c.addEventListener('click',close);sc.addEventListener('click',close);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});})();
+</script>
 <div class="sticky"><a class="call" href="tel:+13042479957">Call 304-247-9957</a></div>
 </body>
 </html>
