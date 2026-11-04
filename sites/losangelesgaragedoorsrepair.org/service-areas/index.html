@@ -12,14 +12,14 @@
 <meta property="og:url" content="https://www.losangelesgaragedoorsrepair.org/service-areas/">
 <meta property="og:site_name" content="Los Angeles Garage Door Repair">
 <meta property="og:locale" content="en_US">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-hidden='true'%3E%3Cpath d='M32 3 62 24v37H2V24z' fill='%23F2B705'/%3E%3Cpath d='M32 3 62 24H2z' fill='%23D9A300'/%3E%3Crect x='11' y='27' width='42' height='34' fill='%231B2733'/%3E%3Crect x='15' y='31' width='34' height='6' rx='1' fill='%23F2B705'/%3E%3Crect x='15' y='41' width='34' height='6' rx='1' fill='%23F2B705'/%3E%3Crect x='15' y='51' width='34' height='6' rx='1' fill='%23F2B705'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 3 62 24v37H2V24z' fill='%23E8D28A'/%3E%3Cpath d='M32 3 62 24H2z' fill='%23CCB979'/%3E%3Crect x='11' y='27' width='42' height='34' fill='%232E3A1F'/%3E%3Crect x='15' y='31' width='34' height='6' rx='1' fill='%23E8D28A'/%3E%3Crect x='15' y='41' width='34' height='6' rx='1' fill='%23E8D28A'/%3E%3Crect x='15' y='51' width='34' height='6' rx='1' fill='%23E8D28A'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#1B2733;--steel:#41566B;--mist:#8A9AAA;--panel:#E6EAEE;--paper:#F3F5F7;--white:#fff;
-  --signal:#F2B705;--signal-ink:#1B2733;--measure:64ch;
+  --ink:#2E3A1F;--ink2:#3D482F;--ink3:#4F5A43;--steel:#5C6550;--mist:#9BA093;--panel:#E7E7E0;--paper:#F5F4EE;--white:#fff;
+  --signal:#E8D28A;--signal-hover:#EBD89A;--signal-ink:#2E3A1F;--ondark:#D1D4CE;--measure:64ch;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -45,19 +45,19 @@ a{color:inherit}
 @media (max-width:640px){.brand b{font-size:1.15rem}.brand small{display:none}.brand svg{width:36px;height:36px}}
 .call{display:inline-flex;align-items:center;gap:.6rem;background:var(--signal);color:var(--signal-ink);text-decoration:none;font-weight:600;padding:.7rem 1.1rem;border-radius:4px;white-space:nowrap}
 .call svg{width:18px;height:18px}
-.call:hover{background:#FFC61A}
+.call:hover{background:var(--signal-hover)}
 
 /* hero */
 .hero{background:var(--ink);color:var(--white);padding:3.5rem 0 0}
 .hero h1{font-size:clamp(2.6rem,7vw,5.2rem);max-width:15ch}
 .hero.sub h1{font-size:clamp(2.2rem,5.5vw,4rem)}
-.hero .lede{font-size:1.15rem;color:#C9D3DD;max-width:54ch;margin:1.25rem 0 2rem}
+.hero .lede{font-size:1.15rem;color:var(--ondark);max-width:54ch;margin:1.25rem 0 2rem}
 .bignum{display:block;text-decoration:none;font-family:"Barlow Condensed";font-weight:700;font-size:clamp(2.4rem,8vw,5rem);line-height:1;color:var(--signal);letter-spacing:.01em}
-.bignum span{display:block;font-family:Barlow;font-weight:500;font-size:1rem;color:#C9D3DD;letter-spacing:.02em;margin-bottom:.35rem}
-.facts{display:flex;flex-wrap:wrap;gap:.6rem 2rem;margin:2rem 0 0;padding:0;list-style:none;color:#C9D3DD;font-weight:500}
+.bignum span{display:block;font-family:Barlow;font-weight:500;font-size:1rem;color:var(--ondark);letter-spacing:.02em;margin-bottom:.35rem}
+.facts{display:flex;flex-wrap:wrap;gap:.6rem 2rem;margin:2rem 0 0;padding:0;list-style:none;color:var(--ondark);font-weight:500}
 .facts li::before{content:"";display:inline-block;width:10px;height:10px;background:var(--signal);margin-right:.55rem;transform:translateY(-1px)}
 .door{margin-top:3rem;display:grid;grid-template-rows:repeat(4,22px);gap:6px;background:var(--ink)}
-.door i{display:block;background:linear-gradient(180deg,#2B3A49,#223040);border-top:1px solid #3B4D5F}
+.door i{display:block;background:linear-gradient(180deg,var(--ink3),var(--ink2));border-top:1px solid var(--ink3)}
 .hero.sub .door{margin-top:2.5rem;grid-template-rows:repeat(2,22px)}
 
 /* sections */
@@ -89,7 +89,7 @@ section h3{font-size:1.45rem;margin:1.6rem 0 .4rem}
 .towns a:hover{border-bottom:2px solid var(--signal)}
 .band{background:var(--ink);color:var(--white)}
 .band h2{color:var(--white)}
-.band p{color:#C9D3DD}
+.band p{color:var(--ondark)}
 .band .bignum{margin-top:1.5rem}
 .offer{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
 .offer div{background:var(--white);border-top:6px solid var(--signal);padding:1.1rem 1.2rem}
@@ -119,22 +119,22 @@ footer .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr
 footer h3{color:var(--white);font-size:1.2rem;margin:0 0 .5rem}
 footer ul{list-style:none;padding:0;margin:0}
 footer li{padding:.2rem 0}
-footer a{color:#C9D3DD;text-decoration:none}
+footer a{color:var(--ondark);text-decoration:none}
 footer a:hover{color:var(--white)}
 footer .pay{margin:0 0 1.5rem}
 footer .pay .brands{margin-top:.4rem}
-footer .pay .brands li{background:transparent;border-color:#3B4D5F;color:#C9D3DD;font-size:1rem;padding:.25rem .65rem}
-footer .legal{border-top:1px solid #3B4D5F;padding-top:1rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem 2rem}
+footer .pay .brands li{background:transparent;border-color:var(--ink3);color:var(--ondark);font-size:1rem;padding:.25rem .65rem}
+footer .legal{border-top:1px solid var(--ink3);padding-top:1rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem 2rem}
 .sticky{display:none}
 @media (max-width:640px){
   .top .call span{display:none}
-  .sticky{display:flex;position:fixed;inset:auto 0 0 0;z-index:9;justify-content:center;padding:.6rem;background:var(--ink);border-top:1px solid #3B4D5F}
+  .sticky{display:flex;position:fixed;inset:auto 0 0 0;z-index:9;justify-content:center;padding:.6rem;background:var(--ink);border-top:1px solid var(--ink3)}
   .sticky .call{width:100%;justify-content:center;font-size:1.05rem}
   body{padding-bottom:4.5rem}
 }
 
 .crumb{margin:0 0 .5rem;font-weight:500}
-.crumb a{color:#C9D3DD;text-decoration:none;border-bottom:2px solid var(--signal)}
+.crumb a{color:var(--ondark);text-decoration:none;border-bottom:2px solid var(--signal)}
 .meta{color:var(--mist);font-weight:500;margin:0}
 .prose h2{font-size:1.9rem;margin:1.8rem 0 .6rem}
 .prose p{color:var(--ink)}
@@ -142,19 +142,19 @@ footer .legal{border-top:1px solid #3B4D5F;padding-top:1rem;display:flex;flex-wr
 .svc h3 a:hover{border-bottom:3px solid var(--signal)}
 
 /* hamburger + drawer */
-.burger{display:inline-flex;flex-direction:column;justify-content:center;gap:5px;width:46px;height:46px;padding:0 10px;background:transparent;border:2px solid #3B4D5F;border-radius:4px;cursor:pointer}
+.burger{display:inline-flex;flex-direction:column;justify-content:center;gap:5px;width:46px;height:46px;padding:0 10px;background:transparent;border:2px solid var(--ink3);border-radius:4px;cursor:pointer}
 .burger span{display:block;height:3px;background:var(--white);border-radius:2px}
 .burger:hover{border-color:var(--signal)}
-.scrim{position:fixed;inset:0;background:rgba(27,39,51,.55);z-index:20;opacity:0;transition:opacity .2s}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20;opacity:0;transition:opacity .2s}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(340px,88vw);z-index:21;background:var(--ink);color:var(--white);overflow-y:auto;padding:0 1.25rem 2rem;transform:translateX(100%);transition:transform .22s ease;box-shadow:-8px 0 30px rgba(0,0,0,.35)}
 .drawer[hidden],.scrim[hidden]{display:none}
 .menu-open .scrim{opacity:1}
 .menu-open .drawer{transform:none}
 @media (prefers-reduced-motion:reduce){.drawer,.scrim{transition:none}}
-.drawer-head{display:flex;align-items:center;justify-content:space-between;min-height:76px;font-family:"Barlow Condensed";font-weight:700;font-size:1.5rem;text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid #3B4D5F;margin-bottom:.5rem}
-.drawer .close{background:transparent;border:2px solid #3B4D5F;color:var(--white);width:42px;height:42px;border-radius:4px;font-size:1.6rem;line-height:1;cursor:pointer}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;min-height:76px;font-family:"Barlow Condensed";font-weight:700;font-size:1.5rem;text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid var(--ink3);margin-bottom:.5rem}
+.drawer .close{background:transparent;border:2px solid var(--ink3);color:var(--white);width:42px;height:42px;border-radius:4px;font-size:1.6rem;line-height:1;cursor:pointer}
 .drawer .close:hover{border-color:var(--signal)}
-.drawer a{display:block;padding:.75rem .5rem;text-decoration:none;font-weight:500;font-size:1.05rem;border-bottom:1px solid #2B3A49;color:#E6EAEE}
+.drawer a{display:block;padding:.75rem .5rem;text-decoration:none;font-weight:500;font-size:1.05rem;border-bottom:1px solid var(--ink3);color:var(--ondark)}
 .drawer a:hover{color:var(--signal)}
 .drawer a[aria-current]{color:var(--signal);box-shadow:inset 4px 0 0 var(--signal);padding-left:.9rem}
 .drawer .group{margin:1.1rem 0 .2rem .5rem;font-family:"Barlow Condensed";font-weight:700;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mist)}
@@ -199,7 +199,7 @@ footer .legal{border-top:1px solid #3B4D5F;padding-top:1rem;display:flex;flex-wr
 <header class="top">
   <div class="wrap">
     <a class="brand" href="/" aria-label="Los Angeles Garage Door Repair home">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 3 62 24v37H2V24z" fill="#F2B705"/><path d="M32 3 62 24H2z" fill="#D9A300"/><rect x="11" y="27" width="42" height="34" fill="#1B2733"/><rect x="15" y="31" width="34" height="6" rx="1" fill="#F2B705"/><rect x="15" y="41" width="34" height="6" rx="1" fill="#F2B705"/><rect x="15" y="51" width="34" height="6" rx="1" fill="#F2B705"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 3 62 24v37H2V24z" fill="var(--signal)"/><path d="M32 3 62 24H2z" fill="var(--signal-hover)"/><rect x="11" y="27" width="42" height="34" fill="var(--ink)"/><rect x="15" y="31" width="34" height="6" rx="1" fill="var(--signal)"/><rect x="15" y="41" width="34" height="6" rx="1" fill="var(--signal)"/><rect x="15" y="51" width="34" height="6" rx="1" fill="var(--signal)"/></svg>
       <span class="wm"><b><em>Los Angeles</em> Garage Door Repair</b><small>Since 2004 · Los Angeles, CA · 24 hours</small></span>
     </a>
     <a class="call" href="tel:+12137330607"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.7a2 2 0 0 1 1.7 2z"/></svg><span>213-733-0607</span></a>

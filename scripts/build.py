@@ -18,6 +18,71 @@ LOCATIONS = json.loads((ROOT / "data" / "locations.json").read_text())
 OUT = ROOT / "sites"
 SINCE = "2004"
 
+# (ink, signal, signal_ink, paper) — the rest is derived
+PALETTES = [
+    ("#1B2733", "#F2B705", "#1B2733", "#F3F5F7"),  # steel + signal yellow
+    ("#14281D", "#B7D94A", "#14281D", "#F2F5EF"),  # forest + lime
+    ("#3B1219", "#E8B04B", "#3B1219", "#F7F3F1"),  # burgundy + gold
+    ("#202124", "#FF7A1A", "#1B1B1B", "#F4F4F4"),  # charcoal + safety orange
+    ("#0F3A3F", "#5FD3C7", "#0F3A3F", "#EFF5F5"),  # deep teal + aqua
+    ("#0D1F3C", "#FFD166", "#0D1F3C", "#F1F4F9"),  # midnight + warm gold
+    ("#2B1D14", "#E39A4F", "#2B1D14", "#F6F2EC"),  # espresso + copper
+    ("#26282B", "#E63946", "#FFFFFF", "#F5F5F5"),  # graphite + red
+    ("#2E3A1F", "#E8D28A", "#2E3A1F", "#F5F4EE"),  # olive + sand
+    ("#2A1E4A", "#FFB347", "#2A1E4A", "#F4F2F8"),  # royal purple + amber
+    ("#123C5A", "#FF8C69", "#123C5A", "#EFF4F8"),  # ocean + coral
+    ("#4A2318", "#F2D16B", "#4A2318", "#F7F4EE"),  # brick + cream yellow
+]
+
+
+def _hex(rgb):
+    return "#%02X%02X%02X" % tuple(max(0, min(255, round(v))) for v in rgb)
+
+
+def _rgb(h):
+    h = h.lstrip("#")
+    return [int(h[i:i + 2], 16) for i in (0, 2, 4)]
+
+
+def mix(a, b, t):
+    return _hex([x + (y - x) * t for x, y in zip(_rgb(a), _rgb(b))])
+
+
+def palette_for(idx):
+    ink, signal, signal_ink, paper = PALETTES[idx % len(PALETTES)]
+    return {
+        "c_ink": ink,
+        "c_ink2": mix(ink, "#FFFFFF", 0.07),
+        "c_ink3": mix(ink, "#FFFFFF", 0.16),
+        "c_steel": mix(ink, "#FFFFFF", 0.22),
+        "c_mist": mix(ink, "#FFFFFF", 0.52),
+        "c_panel": mix(paper, ink, 0.07),
+        "c_paper": paper,
+        "c_signal": signal,
+        "c_signal_hover": mix(signal, "#FFFFFF", 0.14),
+        "c_signal_ink": signal_ink,
+        "c_ondark": mix(ink, "#FFFFFF", 0.78),
+    }
+
+
+def assign_palettes(locs):
+    """Spread palettes so sites in the same state never share one."""
+    by_state = {}
+    out = {}
+    for i, loc in enumerate(locs):
+        st = loc["state"]
+        used = by_state.setdefault(st, set())
+        k = i % len(PALETTES)
+        while k in used:
+            k = (k + 1) % len(PALETTES)
+        used.add(k)
+        out[loc["domain"]] = k
+    return out
+
+
+PALETTE_OF = assign_palettes(LOCATIONS)
+MARK = """<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M32 3 62 24v37H2V24z' fill='{signal}'/><path d='M32 3 62 24H2z' fill='{signal2}'/><rect x='11' y='27' width='42' height='34' fill='{ink}'/><rect x='15' y='31' width='34' height='6' rx='1' fill='{signal}'/><rect x='15' y='41' width='34' height='6' rx='1' fill='{signal}'/><rect x='15' y='51' width='34' height='6' rx='1' fill='{signal}'/></svg>"""
+
 # slug -> (page template, nav key)
 PAGES = {
     "": ("home", "home"),
@@ -47,11 +112,11 @@ FAQ_SCHEMA = """<script type="application/ld+json">
 
 LOGO = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="640" height="160" role="img" aria-label="{cityc} Garage Door Repair">
 <style>@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&amp;family=Barlow:wght@500&amp;display=swap');</style>
-<rect width="640" height="160" fill="#1B2733"/>
-<g transform="translate(28,24) scale(1.75)"><path d="M32 3 62 24v37H2V24z" fill="#F2B705"/><path d="M32 3 62 24H2z" fill="#D9A300"/><rect x="11" y="27" width="42" height="34" fill="#1B2733"/><rect x="15" y="31" width="34" height="6" rx="1" fill="#F2B705"/><rect x="15" y="41" width="34" height="6" rx="1" fill="#F2B705"/><rect x="15" y="51" width="34" height="6" rx="1" fill="#F2B705"/></g>
-<text x="156" y="78" font-family="'Barlow Condensed','Arial Narrow',sans-serif" font-weight="700" font-size="46" fill="#F2B705" letter-spacing="0.5">{city}</text>
+<rect width="640" height="160" fill="{ink}"/>
+<g transform="translate(28,24) scale(1.75)"><path d="M32 3 62 24v37H2V24z" fill="{signal}"/><path d="M32 3 62 24H2z" fill="{signal2}"/><rect x="11" y="27" width="42" height="34" fill="{ink}"/><rect x="15" y="31" width="34" height="6" rx="1" fill="{signal}"/><rect x="15" y="41" width="34" height="6" rx="1" fill="{signal}"/><rect x="15" y="51" width="34" height="6" rx="1" fill="{signal}"/></g>
+<text x="156" y="78" font-family="'Barlow Condensed','Arial Narrow',sans-serif" font-weight="700" font-size="46" fill="{signal}" letter-spacing="0.5">{city}</text>
 <text x="156" y="116" font-family="'Barlow Condensed','Arial Narrow',sans-serif" font-weight="700" font-size="38" fill="#FFFFFF" letter-spacing="0.5">GARAGE DOOR REPAIR</text>
-<text x="156" y="142" font-family="Barlow,sans-serif" font-weight="500" font-size="13" fill="#8A9AAA" letter-spacing="2.5">SINCE {since} · {cityc}, {st} · 24 HOURS</text>
+<text x="156" y="142" font-family="Barlow,sans-serif" font-weight="500" font-size="13" fill="{mist}" letter-spacing="2.5">SINCE {since} · {cityc}, {st} · 24 HOURS</text>
 </svg>
 """
 BLOG_DIR = T / "blog"
@@ -192,15 +257,18 @@ def fields(loc):
         "nearby_inline": ", ".join(nearby[:-1]) + (" and " + nearby[-1] if len(nearby) > 1 else (nearby[0] if nearby else "the surrounding area")),
         "nearby_short": ", ".join(nearby[:4]) if nearby else "the surrounding area",
         "nearby_list": "\n      ".join(f"<li>{htmlmod.escape(n)}</li>" for n in nearby) or "<li>Surrounding communities</li>",
-        "styles": STYLES.read_text().strip(),
+        "styles": STYLES.read_text().strip(),  # colors substituted later in sub()
+        **palette_for(PALETTE_OF[loc["domain"]]),
+        "favicon": "data:image/svg+xml," + MARK.format(signal=palette_for(PALETTE_OF[loc["domain"]])["c_signal"], signal2=mix(palette_for(PALETTE_OF[loc["domain"]])["c_signal"], "#000000", 0.12), ink=palette_for(PALETTE_OF[loc["domain"]])["c_ink"]).replace("#", "%23").replace("<", "%3C").replace(">", "%3E"),
         "areas_schema": "".join(f',{{"@type":"City","name":"{htmlmod.escape(n)}"}}' for n in nearby),
     }
     return f
 
 
 def sub(text, f):
-    for k, v in f.items():
-        text = text.replace("{{" + k + "}}", v)
+    for _ in range(2):
+        for k, v in f.items():
+            text = text.replace("{{" + k + "}}", v)
     return text
 
 
@@ -251,7 +319,7 @@ def build_site(loc, today):
         if slug != "thank-you":
             urls.append(path)
     (d / "robots.txt").write_text(ROBOTS.format(domain=f["domain"]))
-    (d / "logo.svg").write_text(LOGO.format(city=htmlmod.escape(f["city"].upper()), since=f["since"], st=f["st"], cityc=htmlmod.escape(f["city"])))
+    (d / "logo.svg").write_text(LOGO.format(city=htmlmod.escape(f["city"].upper()), since=f["since"], st=f["st"], cityc=htmlmod.escape(f["city"]), ink=f["c_ink"], signal=f["c_signal"], signal2=mix(f["c_signal"], "#000000", 0.12), mist=f["c_mist"]))
     (d / "_redirects").write_text(REDIRECTS.format(domain=f["domain"]))
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u in urls:
