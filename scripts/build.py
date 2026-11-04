@@ -195,7 +195,7 @@ def render_blog(f):
         content = POST_TPL.format(title=htmlmod.escape(sub(p["title"], f)), desc=htmlmod.escape(sub(p["desc"], f)), datefmt=datefmt(p["date"]),
                                   business=f["business"], body=sub(p["body"], f), city=f["city"], phone=f["phone"], phone_digits=f["phone_digits"], others=others)
         pf.update({
-            "page_title": htmlmod.escape(sub(p["title"], f) + " | " + f["business"], quote=True),
+            "page_title": htmlmod.escape(sub(p["title"], f) + f" - {f['city']}, {f['st']} | " + f["business"], quote=True),
             "page_desc": htmlmod.escape(sub(p["desc"], f), quote=True),
             "path": f"/blog/{p['slug']}/",
             "content": content,
@@ -208,7 +208,7 @@ def render_blog(f):
         cards.append(f'      <div class="svc"><h3><a href="/blog/{p["slug"]}/">{htmlmod.escape(sub(p["title"], f))}</a></h3><p>{htmlmod.escape(sub(p["desc"], f))}</p><a class="more" href="/blog/{p["slug"]}/">Read the article</a></div>')
     pf = dict(f)
     pf.update({
-        "page_title": htmlmod.escape(f"Garage Door Blog | {f['business']}", quote=True),
+        "page_title": htmlmod.escape(f"Blog - {f['city']}, {f['st']} {f['zip']} | {f['business']}", quote=True),
         "page_desc": htmlmod.escape(f"Garage door repair advice for {f['city']} homeowners: springs, openers, noises, maintenance and when to replace.", quote=True),
         "path": "/blog/",
         "content": BLOG_INDEX_TPL.format(city=f["city"], cards="\n".join(cards)),
