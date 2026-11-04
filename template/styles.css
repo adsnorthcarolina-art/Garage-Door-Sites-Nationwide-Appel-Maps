@@ -116,3 +116,11 @@ footer .legal{border-top:1px solid #3B4D5F;padding-top:1rem;display:flex;flex-wr
   .sticky .call{width:100%;justify-content:center;font-size:1.05rem}
   body{padding-bottom:4.5rem}
 }
+
+.crumb{margin:0 0 .5rem;font-weight:500}
+.crumb a{color:#C9D3DD;text-decoration:none;border-bottom:2px solid var(--signal)}
+.meta{color:var(--mist);font-weight:500;margin:0}
+.prose h2{font-size:1.9rem;margin:1.8rem 0 .6rem}
+.prose p{color:var(--ink)}
+.svc h3 a{text-decoration:none}
+.svc h3 a:hover{border-bottom:3px solid var(--signal)}

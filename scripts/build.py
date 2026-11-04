@@ -30,7 +30,7 @@ PAGES = {
     "about": ("about", "about"),
     "contact": ("contact", "contact"),
 }
-NAV_KEYS = ["home", "spring", "opener", "offtrack", "newdoor", "emergency", "areas", "about", "contact"]
+NAV_KEYS = ["home", "spring", "opener", "offtrack", "newdoor", "emergency", "areas", "blog", "about", "contact"]
 
 FAQ_SCHEMA = """<script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -52,6 +52,106 @@ LOGO = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="6
 <text x="156" y="142" font-family="Barlow,sans-serif" font-weight="500" font-size="13" fill="#8A9AAA" letter-spacing="2.5">SINCE {since} · {cityc}, {st} · 24 HOURS</text>
 </svg>
 """
+BLOG_DIR = T / "blog"
+
+def blog_posts():
+    posts = []
+    for fp in sorted(BLOG_DIR.glob("*.html")):
+        src = fp.read_text()
+        meta = dict(re.findall(r"<!-- (\w+): (.*?) -->", src))
+        body = re.sub(r"<!-- \w+: .*? -->\n?", "", src)
+        posts.append({"slug": fp.stem, "title": meta["title"], "desc": meta["desc"], "date": meta["date"], "body": body})
+    posts.sort(key=lambda x: x["date"], reverse=True)
+    return posts
+
+POSTS = blog_posts()
+
+POST_TPL = """<section class="hero sub" aria-labelledby="h1">
+  <div class="wrap">
+    <p class="crumb"><a href="/blog/">Blog</a></p>
+    <h1 id="h1">{title}</h1>
+    <p class="lede">{desc}</p>
+    <p class="meta">{datefmt} · {business}</p>
+  </div>
+  <div class="door" aria-hidden="true"><i></i><i></i></div>
+</section>
+<section aria-label="Article">
+  <div class="wrap two">
+    <article class="prose">
+{body}
+    </article>
+    <div>
+      <div class="aside">
+        <h3>Need it fixed today?</h3>
+        <p>Same-day garage door repair across {city} and nearby. Phones answered 24 hours.</p>
+        <a class="call" href="tel:+1{phone_digits}">Call {phone}</a>
+      </div>
+      <div class="aside" style="margin-top:1rem">
+        <h3>More from the blog</h3>
+        <ul>{others}</ul>
+      </div>
+    </div>
+  </div>
+</section>"""
+
+ARTICLE_SCHEMA = """<script type="application/ld+json">
+{{"@context":"https://schema.org","@type":"BlogPosting","headline":"{title}","description":"{desc}","datePublished":"{date}","dateModified":"{date}","mainEntityOfPage":"https://www.{domain}/blog/{slug}/","author":{{"@type":"Organization","name":"{business}","url":"https://www.{domain}/"}},"publisher":{{"@type":"Organization","name":"{business}","url":"https://www.{domain}/"}}}}
+</script>"""
+
+BLOG_INDEX_TPL = """<section class="hero sub" aria-labelledby="h1">
+  <div class="wrap">
+    <h1 id="h1">Garage door advice from {city}</h1>
+    <p class="lede">Plain answers to the questions {city} homeowners ask us most — what breaks, why, what it costs and what you can check yourself.</p>
+  </div>
+  <div class="door" aria-hidden="true"><i></i><i></i></div>
+</section>
+<section aria-label="Articles">
+  <div class="wrap">
+    <div class="grid">
+{cards}
+    </div>
+  </div>
+</section>"""
+
+
+def datefmt(d):
+    return datetime.date.fromisoformat(d).strftime("%B %-d, %Y")
+
+
+def render_blog(f):
+    out = []  # (path, html)
+    cards = []
+    for p in POSTS:
+        pf = dict(f)
+        others = "".join(f'<li><a href="/blog/{o["slug"]}/">{htmlmod.escape(sub(o["title"], f))}</a></li>' for o in POSTS if o is not p)
+        content = POST_TPL.format(title=htmlmod.escape(sub(p["title"], f)), desc=htmlmod.escape(sub(p["desc"], f)), datefmt=datefmt(p["date"]),
+                                  business=f["business"], body=sub(p["body"], f), city=f["city"], phone=f["phone"], phone_digits=f["phone_digits"], others=others)
+        pf.update({
+            "page_title": htmlmod.escape(sub(p["title"], f) + " | " + f["business"], quote=True),
+            "page_desc": htmlmod.escape(sub(p["desc"], f), quote=True),
+            "path": f"/blog/{p['slug']}/",
+            "content": content,
+            "schema_extra": ARTICLE_SCHEMA.format(title=htmlmod.escape(sub(p["title"], f), quote=True), desc=htmlmod.escape(sub(p["desc"], f), quote=True),
+                                                  date=p["date"], domain=f["domain"], slug=p["slug"], business=f["business"]),
+        })
+        for k in NAV_KEYS:
+            pf[f"cur_{k}"] = 'aria-current="page"' if k == "blog" else ""
+        out.append((f"/blog/{p['slug']}/", sub(BASE, pf)))
+        cards.append(f'      <div class="svc"><h3><a href="/blog/{p["slug"]}/">{htmlmod.escape(sub(p["title"], f))}</a></h3><p>{htmlmod.escape(sub(p["desc"], f))}</p><a class="more" href="/blog/{p["slug"]}/">Read the article</a></div>')
+    pf = dict(f)
+    pf.update({
+        "page_title": htmlmod.escape(f"Garage Door Blog | {f['business']}", quote=True),
+        "page_desc": htmlmod.escape(f"Garage door repair advice for {f['city']} homeowners: springs, openers, noises, maintenance and when to replace.", quote=True),
+        "path": "/blog/",
+        "content": BLOG_INDEX_TPL.format(city=f["city"], cards="\n".join(cards)),
+        "schema_extra": "",
+    })
+    for k in NAV_KEYS:
+        pf[f"cur_{k}"] = 'aria-current="page"' if k == "blog" else ""
+    out.append(("/blog/", sub(BASE, pf)))
+    return out
+
+
 ROBOTS = "User-agent: *\nAllow: /\nSitemap: https://www.{domain}/sitemap.xml\n"
 REDIRECTS = "https://{domain}/* https://www.{domain}/:splat 301!\n"
 
@@ -132,6 +232,14 @@ def build_site(loc, today):
         shutil.rmtree(d)
     d.mkdir(parents=True)
     urls = []
+    f["blog_teasers"] = "\n".join(
+        f'      <div class="svc"><h3><a href="/blog/{p["slug"]}/">{htmlmod.escape(sub(p["title"], f))}</a></h3><p>{htmlmod.escape(sub(p["desc"], f))}</p><a class="more" href="/blog/{p["slug"]}/">Read the article</a></div>'
+        for p in POSTS[:3])
+    for path, out in render_blog(f):
+        target = d / path.strip("/") / "index.html"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(out)
+        urls.append(path)
     for slug in PAGES:
         path, out = render_page(slug, f)
         target = d / slug / "index.html" if slug else d / "index.html"
