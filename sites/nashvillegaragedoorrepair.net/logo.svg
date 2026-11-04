@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="640" height="160" role="img" aria-label="Nashville Garage Door Repair">
+<style>@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&amp;family=Barlow:wght@500&amp;display=swap');</style>
+<rect width="640" height="160" fill="#1B2733"/>
+<g transform="translate(28,24) scale(1.75)"><path d="M32 3 62 24v37H2V24z" fill="#F2B705"/><path d="M32 3 62 24H2z" fill="#D9A300"/><rect x="11" y="27" width="42" height="34" fill="#1B2733"/><rect x="15" y="31" width="34" height="6" rx="1" fill="#F2B705"/><rect x="15" y="41" width="34" height="6" rx="1" fill="#F2B705"/><rect x="15" y="51" width="34" height="6" rx="1" fill="#F2B705"/></g>
+<text x="156" y="78" font-family="'Barlow Condensed','Arial Narrow',sans-serif" font-weight="700" font-size="46" fill="#F2B705" letter-spacing="0.5">NASHVILLE</text>
+<text x="156" y="116" font-family="'Barlow Condensed','Arial Narrow',sans-serif" font-weight="700" font-size="38" fill="#FFFFFF" letter-spacing="0.5">GARAGE DOOR REPAIR</text>
+<text x="156" y="142" font-family="Barlow,sans-serif" font-weight="500" font-size="13" fill="#8A9AAA" letter-spacing="2.5">SINCE 2004 · Nashville, TN · 24 HOURS</text>
+</svg>

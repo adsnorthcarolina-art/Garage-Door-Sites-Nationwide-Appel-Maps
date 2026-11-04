@@ -15,10 +15,14 @@ a{color:inherit}
 
 /* header */
 .top{background:var(--ink);color:var(--white)}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:64px}
-.brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;font-family:"Barlow Condensed";font-weight:700;font-size:1.35rem;letter-spacing:.01em;line-height:1.05}
-.brand svg{width:30px;height:30px;flex:none}
-.brand small{display:block;font-family:Barlow;font-weight:500;font-size:.78rem;letter-spacing:.02em;color:var(--mist)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:76px}
+.brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--white)}
+.brand svg{width:44px;height:44px;flex:none}
+.brand .wm{line-height:1}
+.brand b{display:block;font-family:"Barlow Condensed";font-weight:700;font-size:1.5rem;letter-spacing:.01em;text-transform:uppercase}
+.brand b em{font-style:normal;color:var(--signal)}
+.brand small{display:block;font-family:Barlow;font-weight:500;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mist);margin-top:.3rem}
+@media (max-width:640px){.brand b{font-size:1.15rem}.brand small{display:none}.brand svg{width:36px;height:36px}}
 .call{display:inline-flex;align-items:center;gap:.6rem;background:var(--signal);color:var(--signal-ink);text-decoration:none;font-weight:600;padding:.7rem 1.1rem;border-radius:4px;white-space:nowrap}
 .call svg{width:18px;height:18px}
 .call:hover{background:#FFC61A}
