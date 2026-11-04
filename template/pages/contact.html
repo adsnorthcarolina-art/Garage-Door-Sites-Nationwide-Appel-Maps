@@ -1,5 +1,5 @@
-<!-- title: Contact {{business}} - {{city}}, {{st}} {{zip}} | {{phone}} -->
-<!-- desc: Call {{business}} at {{phone}}, 24 hours a day, for same-day garage door repair in {{city}}, {{st}}. Office: {{street}}, {{city}}, {{st}} {{zip}}. -->
+<!-- title: Contact {{business}} - {{cityst}} {{zip}} | {{phone}} -->
+<!-- desc: Call {{business}} at {{phone}}, 24 hours a day, for same-day garage door repair in {{cityst}}. Office: {{street}}, {{cityst}} {{zip}}. -->
 <section class="hero sub" aria-labelledby="h1">
   <div class="wrap">
     <h1 id="h1">Contact {{business}}</h1>
@@ -14,7 +14,7 @@
       <h2 id="h2a">Office</h2>
       <dl>
         <dt>Phone</dt><dd><a href="tel:+1{{phone_digits}}">{{phone}}</a></dd>
-        <dt>Address</dt><dd>{{street}}<br>{{city}}, {{st}} {{zip}}</dd>
+        <dt>Address</dt><dd>{{street}}<br>{{cityst}} {{zip}}</dd>
         <dt>Hours</dt><dd>24 hours a day, 7 days a week</dd>
         <dt>Service area</dt><dd>{{city}}, {{nearby_short}} and surrounding {{state}} communities</dd>
       </dl>
@@ -23,7 +23,7 @@
       <h2>Or send your details</h2>
       <form class="lead" action="https://api.web3forms.com/submit" method="POST">
         <input type="hidden" name="access_key" value="{{form_key}}">
-        <input type="hidden" name="subject" value="New lead — {{business}} ({{city}}, {{st}})">
+        <input type="hidden" name="subject" value="New lead — {{business}} ({{cityst}})">
         <input type="hidden" name="from_name" value="{{business}} website">
         <input type="hidden" name="site" value="{{domain}}">
         <input type="hidden" name="redirect" value="https://www.{{domain}}/thank-you/">
