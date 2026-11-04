@@ -95,6 +95,7 @@ PAGES = {
     "about": ("about", "about"),
     "contact": ("contact", "contact"),
     "thank-you": ("thankyou", "contact"),
+    "404": ("404", "home"),
 }
 FORM_KEY = (ROOT / "data" / "form_key.txt").read_text().strip() if (ROOT / "data" / "form_key.txt").exists() else "YOUR-WEB3FORMS-ACCESS-KEY"
 NAV_KEYS = ["home", "spring", "opener", "offtrack", "newdoor", "emergency", "areas", "blog", "about", "contact"]
@@ -285,7 +286,7 @@ def render_page(slug, f):
         "page_desc": htmlmod.escape(sub(desc, f), quote=True),
         "path": path,
         "content": sub(body, f),
-        "schema_extra": (sub(FAQ_SCHEMA, f) if slug == "" else "") + ('<meta name="robots" content="noindex">' if slug == "thank-you" else ""),
+        "schema_extra": (sub(FAQ_SCHEMA, f) if slug == "" else "") + ('<meta name="robots" content="noindex">' if slug in ("thank-you", "404") else ""),
     })
     for k in NAV_KEYS:
         pf[f"cur_{k}"] = 'aria-current="page"' if k == nav_key else ""
@@ -313,14 +314,13 @@ def build_site(loc, today):
         urls.append(path)
     for slug in PAGES:
         path, out = render_page(slug, f)
-        target = d / slug / "index.html" if slug else d / "index.html"
+        target = d / "404.html" if slug == "404" else (d / slug / "index.html" if slug else d / "index.html")
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(out)
-        if slug != "thank-you":
+        if slug not in ("thank-you", "404"):
             urls.append(path)
     (d / "robots.txt").write_text(ROBOTS.format(domain=f["domain"]))
     (d / "logo.svg").write_text(LOGO.format(city=htmlmod.escape(f["city"].upper()), since=f["since"], st=f["st"], cityc=htmlmod.escape(f["city"]), ink=f["c_ink"], signal=f["c_signal"], signal2=mix(f["c_signal"], "#000000", 0.12), mist=f["c_mist"]))
-    (d / "_redirects").write_text(REDIRECTS.format(domain=f["domain"]))
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u in urls:
         sm.append(f"  <url><loc>https://www.{f['domain']}{u}</loc><lastmod>{today}</lastmod></url>")
@@ -338,6 +338,8 @@ def main():
             continue
         pages += build_site(loc, today)
         n += 1
+    shutil.copy(T / "_worker.js", OUT / "_worker.js")
+    (OUT / "index.html").write_text('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/charlottegaragedoorrepair.net/">')
     print(f"built {n} site(s), {pages} pages, into {OUT}")
 
 

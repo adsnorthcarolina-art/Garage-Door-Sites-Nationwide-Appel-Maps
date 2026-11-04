@@ -16,3 +16,13 @@ Build one city: `python3 scripts/build.py charlotte`
 To change a phone number or address: edit `data/locations.json`, rebuild.  
 To change the design or copy for all cities: edit `template/index.html`, rebuild.  
 To make one city different: edit its `sites/<domain>/index.html` directly (it will be overwritten on the next full build unless you also change the template logic).
+
+## Hosting (Cloudflare Pages)
+
+One Pages project serves every site: `sites/_worker.js` looks at the request hostname and serves
+`sites/<domain>/...`. Apex domains 301 to `www.`.
+
+Pages settings: Framework = None · Build command = *(empty)* · Build output directory = `sites`.
+Then add each domain under Custom domains (both `domain.com` and `www.domain.com`).
+Free plan allows 100 custom domains per project, so the 109 domains are split across two projects
+that deploy the same repo.
