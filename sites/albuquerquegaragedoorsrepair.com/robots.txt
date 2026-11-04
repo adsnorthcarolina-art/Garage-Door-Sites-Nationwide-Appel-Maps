@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.albuquerquegaragedoorsrepair.com/sitemap.xml

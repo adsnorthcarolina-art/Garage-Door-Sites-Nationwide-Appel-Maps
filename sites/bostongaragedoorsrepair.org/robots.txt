@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.bostongaragedoorsrepair.org/sitemap.xml

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.boisegaragedoorrepair.org/sitemap.xml

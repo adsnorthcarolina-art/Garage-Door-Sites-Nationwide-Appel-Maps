@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.littlerockgaragedoorrepair.org/sitemap.xml

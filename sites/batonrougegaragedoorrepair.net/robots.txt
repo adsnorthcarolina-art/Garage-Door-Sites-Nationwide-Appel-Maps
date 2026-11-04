@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.batonrougegaragedoorrepair.net/sitemap.xml

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.cheyennegaragedoorrepair.net/sitemap.xml

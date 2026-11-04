@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.clevelandgaragedoorrepair.net/sitemap.xml
