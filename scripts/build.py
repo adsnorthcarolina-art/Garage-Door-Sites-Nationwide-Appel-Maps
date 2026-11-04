@@ -1,75 +1,154 @@
 #!/usr/bin/env python3
-"""Build one static site per location from template/index.html + data/locations.json.
+"""Build one static multi-page site per location.
 
-Usage:
-  python3 scripts/build.py            # build all
-  python3 scripts/build.py charlotte  # build only domains containing "charlotte"
+  python3 scripts/build.py            # all locations
+  python3 scripts/build.py charlotte  # only domains containing "charlotte"
+
+Inputs:  template/base.html, template/pages/*.html, template/styles.css, data/locations.json
+Output:  sites/<domain>/...
 """
-import json, re, sys, datetime
+import json, re, sys, datetime, shutil, html as htmlmod
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-TEMPLATE = (ROOT / "template" / "index.html").read_text()
+T = ROOT / "template"
+BASE = (T / "base.html").read_text()
+STYLES = T / "styles.css"
 LOCATIONS = json.loads((ROOT / "data" / "locations.json").read_text())
 OUT = ROOT / "sites"
+SINCE = "2004"
+
+# slug -> (page template, nav key)
+PAGES = {
+    "": ("home", "home"),
+    "garage-door-spring-repair": ("spring", "spring"),
+    "garage-door-opener-repair": ("opener", "opener"),
+    "garage-door-off-track-repair": ("offtrack", "offtrack"),
+    "new-garage-door-installation": ("newdoor", "newdoor"),
+    "emergency-garage-door-repair": ("emergency", "emergency"),
+    "service-areas": ("areas", "areas"),
+    "about": ("about", "about"),
+    "contact": ("contact", "contact"),
+}
+NAV_KEYS = ["home", "spring", "opener", "offtrack", "newdoor", "emergency", "areas", "about", "contact"]
+
+FAQ_SCHEMA = """<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How fast can you get to me in {{city}}?","acceptedAnswer":{"@type":"Answer","text":"Most calls in {{city}} are handled the same day. Tell us what the door is doing when you call and we will give you an arrival window right away."}},
+{"@type":"Question","name":"How much does garage door repair cost in {{city}}?","acceptedAnswer":{"@type":"Answer","text":"It depends on the part. Spring, cable and roller repairs are the most common and the most affordable. You get a firm price before any work starts, and the service call fee is applied to the repair."}},
+{"@type":"Question","name":"Do you work on all garage door brands?","acceptedAnswer":{"@type":"Answer","text":"Yes. We service every major door and opener brand, including Clopay, Amarr, Wayne Dalton, LiftMaster, Chamberlain, Genie and Craftsman."}},
+{"@type":"Question","name":"My door is stuck halfway. Is it safe to force it?","acceptedAnswer":{"@type":"Answer","text":"No. A door stuck part-way usually means a broken spring or cable, and the door can drop. Leave it where it is, keep people and cars clear, and call us."}},
+{"@type":"Question","name":"Should I repair or replace my garage door?","acceptedAnswer":{"@type":"Answer","text":"If the panels are sound and it is a spring, cable or opener problem, repair is almost always the better value. If several panels are damaged or the door is 20+ years old and uninsulated, we will walk you through replacement options and prices on site."}},
+{"@type":"Question","name":"What warranty do you give?","acceptedAnswer":{"@type":"Answer","text":"5 years on springs and parts we install, 1 year on labor. New doors carry the manufacturer's warranty on top of ours."}}
+]}
+</script>"""
 
 ROBOTS = "User-agent: *\nAllow: /\nSitemap: https://www.{domain}/sitemap.xml\n"
-SITEMAP = ('<?xml version="1.0" encoding="UTF-8"?>\n'
-           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-           '  <url><loc>https://www.{domain}/</loc><lastmod>{date}</lastmod></url>\n'
-           '</urlset>\n')
-# Cloudflare Pages / Netlify style redirect: apex -> www
 REDIRECTS = "https://{domain}/* https://www.{domain}/:splat 301!\n"
+
+
+def wiki_url(loc):
+    if loc.get("wiki"):
+        return loc["wiki"]
+    city, state = loc["city"].strip(), loc["state"].strip()
+    if city == "Washington DC":
+        return "https://en.wikipedia.org/wiki/Washington,_D.C."
+    return f"https://en.wikipedia.org/wiki/{city.title().replace(' ', '_')},_{state.replace(' ', '_')}"
 
 
 def fields(loc):
     addr = loc["address"].strip()
     m = re.search(r",\s*([A-Z]{2})\s+\d{5}\s*$", addr)
     st = m.group(1) if m else ""
-    street = addr.rsplit(",", 2)[0].strip()  # drop ", City, ST ZIP"
+    street = addr.rsplit(",", 2)[0].strip()
     phone = loc["phone"]
-    return {
+    nearby = loc.get("nearby") or []
+    city = loc["city"].strip().title().replace("Dc", "DC")
+    f = {
         "domain": loc["domain"],
         "business": loc["business"],
-        "city": loc["city"],
-        "state": loc["state"],
+        "city": city,
+        "state": loc["state"].strip(),
         "st": st,
         "zip": loc["zip"],
         "street": street,
         "phone": phone,
         "phone_digits": re.sub(r"\D", "", phone),
-        "hours_label": "24 hours a day",
+        "since": SINCE,
+        "wiki": wiki_url(loc),
         "year": str(datetime.date.today().year),
+        "nearby_inline": ", ".join(nearby[:-1]) + (" and " + nearby[-1] if len(nearby) > 1 else (nearby[0] if nearby else "the surrounding area")),
+        "nearby_short": ", ".join(nearby[:4]) if nearby else "the surrounding area",
+        "nearby_list": "\n      ".join(f"<li>{htmlmod.escape(n)}</li>" for n in nearby) or "<li>Surrounding communities</li>",
+        "styles": STYLES.read_text().strip(),
+        "areas_schema": "".join(f',{{"@type":"City","name":"{htmlmod.escape(n)}"}}' for n in nearby),
     }
+    return f
 
 
-def render(loc):
-    f = fields(loc)
-    html = TEMPLATE
+def sub(text, f):
     for k, v in f.items():
-        html = html.replace("{{" + k + "}}", v)
-    leftover = re.findall(r"{{\w+}}", html)
+        text = text.replace("{{" + k + "}}", v)
+    return text
+
+
+def render_page(slug, f):
+    tpl_name, nav_key = PAGES[slug]
+    src = (T / "pages" / f"{tpl_name}.html").read_text()
+    title = re.search(r"<!-- title: (.*?) -->", src).group(1)
+    desc = re.search(r"<!-- desc: (.*?) -->", src).group(1)
+    body = re.sub(r"<!-- (title|desc): .*? -->\n?", "", src)
+    path = "/" if slug == "" else f"/{slug}/"
+    pf = dict(f)
+    pf.update({
+        "page_title": htmlmod.escape(sub(title, f), quote=True),
+        "page_desc": htmlmod.escape(sub(desc, f), quote=True),
+        "path": path,
+        "content": sub(body, f),
+        "schema_extra": sub(FAQ_SCHEMA, f) if slug == "" else "",
+    })
+    for k in NAV_KEYS:
+        pf[f"cur_{k}"] = 'aria-current="page"' if k == nav_key else ""
+    out = sub(BASE, pf)
+    leftover = re.findall(r"{{\w+}}", out)
     if leftover:
-        raise SystemExit(f"{loc['domain']}: unreplaced placeholders {leftover}")
-    return f, html
+        raise SystemExit(f"{f['domain']}{path}: unreplaced {sorted(set(leftover))}")
+    return path, out
+
+
+def build_site(loc, today):
+    f = fields(loc)
+    d = OUT / f["domain"]
+    if d.exists():
+        shutil.rmtree(d)
+    d.mkdir(parents=True)
+    urls = []
+    for slug in PAGES:
+        path, out = render_page(slug, f)
+        target = d / slug / "index.html" if slug else d / "index.html"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(out)
+        urls.append(path)
+    (d / "robots.txt").write_text(ROBOTS.format(domain=f["domain"]))
+    (d / "_redirects").write_text(REDIRECTS.format(domain=f["domain"]))
+    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for u in urls:
+        sm.append(f"  <url><loc>https://www.{f['domain']}{u}</loc><lastmod>{today}</lastmod></url>")
+    sm.append("</urlset>")
+    (d / "sitemap.xml").write_text("\n".join(sm) + "\n")
+    return len(urls)
 
 
 def main():
     flt = sys.argv[1].lower() if len(sys.argv) > 1 else ""
     today = datetime.date.today().isoformat()
-    n = 0
+    n = pages = 0
     for loc in LOCATIONS:
         if flt and flt not in loc["domain"]:
             continue
-        f, html = render(loc)
-        d = OUT / f["domain"]
-        d.mkdir(parents=True, exist_ok=True)
-        (d / "index.html").write_text(html)
-        (d / "robots.txt").write_text(ROBOTS.format(domain=f["domain"]))
-        (d / "sitemap.xml").write_text(SITEMAP.format(domain=f["domain"], date=today))
-        (d / "_redirects").write_text(REDIRECTS.format(domain=f["domain"]))
+        pages += build_site(loc, today)
         n += 1
-    print(f"built {n} site(s) into {OUT}")
+    print(f"built {n} site(s), {pages} pages, into {OUT}")
 
 
 if __name__ == "__main__":

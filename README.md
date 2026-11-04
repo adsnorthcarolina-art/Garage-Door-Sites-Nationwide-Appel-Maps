@@ -5,7 +5,7 @@ One static website per city/domain, all generated from a single template.
 ```
 data/locations.json      source of truth: city, phone, address, domain (exported from the xlsx)
 data/*.xlsx              original spreadsheet
-template/index.html      the shared page template ({{city}}, {{phone}} ... placeholders)
+template/base.html       shared header/footer/schema; template/pages/*.html = each page body; template/styles.css
 scripts/build.py         generates sites/<domain>/ from template + data
 sites/<domain>/          ready-to-host static site (index.html, robots.txt, sitemap.xml, _redirects)
 ```
