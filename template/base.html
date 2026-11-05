@@ -160,6 +160,11 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
 d.addEventListener('click',function(e){if(e.target===d||e.target.classList.contains('lb-close'))d.close();});})();
 </script>
 <script>
+(function(){var v=document.querySelector('video.reel-video');if(!v||!('IntersectionObserver' in window))return;
+if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;if(!v.src){v.src=v.dataset.src;v.load();}v.play().catch(function(){});io.unobserve(v);});},{rootMargin:'200px'});io.observe(v);})();
+</script>
+<script>
 (function(){
   var dl=window.dataLayer=window.dataLayer||[];
   document.addEventListener('click',function(e){

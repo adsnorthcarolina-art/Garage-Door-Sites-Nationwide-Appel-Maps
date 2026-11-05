@@ -208,6 +208,10 @@ a.zoom:hover img{transform:scale(1.015)}
 .lightbox p{color:#fff;text-align:center;margin:.75rem 0 0;font-size:.95rem}
 .lightbox .lb-close{position:absolute;top:-.25rem;right:-.25rem;background:#fff;border:0;border-radius:50%;width:36px;height:36px;font-size:1.4rem;cursor:pointer}
 @media (prefers-reduced-motion:reduce){a.zoom img{transition:none}}
+
+.reel{margin:0;max-width:420px;justify-self:center;width:100%}
+.reel video{width:100%;height:auto;aspect-ratio:4/5;display:block;border-radius:8px;background:var(--ink);box-shadow:0 16px 40px rgba(0,0,0,.25);object-fit:cover}
+.reel figcaption{font-size:.9rem;color:var(--steel);margin-top:.5rem}
 </style>
 <script type="application/ld+json">
 {
@@ -241,7 +245,7 @@ a.zoom:hover img{transform:scale(1.015)}
 {"@type":"Question","name":"Should I repair or replace my garage door?","acceptedAnswer":{"@type":"Answer","text":"If the panels are sound and it is a spring, cable or opener problem, repair is almost always the better value. If several panels are damaged or the door is 20+ years old and uninsulated, we will walk you through replacement options and prices on site."}},
 {"@type":"Question","name":"What warranty do you give?","acceptedAnswer":{"@type":"Answer","text":"5 years on springs and parts we install, 1 year on labor. New doors carry the manufacturer's warranty on top of ours."}}
 ]}
-</script>
+</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Garage door repair in Dover, DE - Dover Garage Door Repair", "description": "Opener installation, torsion spring replacement, wall control programming and sectional and commercial door repairs by Dover Garage Door Repair technicians serving Dover, DE.", "thumbnailUrl": "https://www.dovergaragedoorrepair.co/video/garage-door-repair-dover-de/poster.webp", "contentUrl": "https://www.dovergaragedoorrepair.co/video/garage-door-repair-dover-de/garage-door-repair.mp4", "uploadDate": "2026-11-05", "duration": "PT48S", "publisher": {"@id": "https://www.dovergaragedoorrepair.co/#business"}}</script>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -303,6 +307,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
    </figure>
   </div>
   <div class="door" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+</section>
+
+<section class="seam" aria-labelledby="h-video">
+  <div class="wrap two">
+    <div>
+      <h2 id="h-video">On the job in Dover</h2>
+      <p>Forty-eight seconds from real service calls: a new opener going in, a torsion spring and tube replaced, a wall control programmed, a sectional door and a commercial door back on track and running smoothly. This is the standard of work every Dover Garage Door Repair technician brings to homes and businesses in Dover.</p>
+      <p>If your door is doing something you see here — or something worse — call 302-414-8058 and describe it. We'll tell you what it usually costs before anyone comes out.</p>
+      <a class="btn" href="/gallery/">See more of our work</a>
+    </div>
+    <figure class="reel">
+      <video class="reel-video" muted loop playsinline preload="none" poster="/video/garage-door-repair-dover-de/poster.webp" data-src="/video/garage-door-repair-dover-de/garage-door-repair.mp4" aria-label="Garage door repair work by Dover Garage Door Repair in Dover, DE" width="544" height="680"></video>
+      <figcaption>Opener installation, spring replacement and door repairs by Dover Garage Door Repair technicians.</figcaption>
+    </figure>
+  </div>
 </section>
 
 <section id="services" aria-labelledby="h-services">
@@ -510,6 +529,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)c
 (function(){var d=document.querySelector('.lightbox');if(!d||!d.showModal)return;var im=d.querySelector('img'),cap=d.querySelector('p');
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.zoom');if(!a)return;e.preventDefault();im.src=a.getAttribute('href');im.alt=a.dataset.alt||'';cap.textContent=(a.closest('figure')&&a.closest('figure').querySelector('figcaption')||{}).textContent||'';d.showModal();});
 d.addEventListener('click',function(e){if(e.target===d||e.target.classList.contains('lb-close'))d.close();});})();
+</script>
+<script>
+(function(){var v=document.querySelector('video.reel-video');if(!v||!('IntersectionObserver' in window))return;
+if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;if(!v.src){v.src=v.dataset.src;v.load();}v.play().catch(function(){});io.unobserve(v);});},{rootMargin:'200px'});io.observe(v);})();
 </script>
 <script>
 (function(){

@@ -175,3 +175,7 @@ a.zoom:hover img{transform:scale(1.015)}
 .lightbox p{color:#fff;text-align:center;margin:.75rem 0 0;font-size:.95rem}
 .lightbox .lb-close{position:absolute;top:-.25rem;right:-.25rem;background:#fff;border:0;border-radius:50%;width:36px;height:36px;font-size:1.4rem;cursor:pointer}
 @media (prefers-reduced-motion:reduce){a.zoom img{transition:none}}
+
+.reel{margin:0;max-width:420px;justify-self:center;width:100%}
+.reel video{width:100%;height:auto;aspect-ratio:4/5;display:block;border-radius:8px;background:var(--ink);box-shadow:0 16px 40px rgba(0,0,0,.25);object-fit:cover}
+.reel figcaption{font-size:.9rem;color:var(--steel);margin-top:.5rem}

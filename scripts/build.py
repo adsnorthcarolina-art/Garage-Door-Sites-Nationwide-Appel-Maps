@@ -306,6 +306,17 @@ def expand_imgs(body, f):
         return img_tag(name.lstrip("!+"), alt, f, eager=eager, link=link)
     return re.sub(r"{{img:([^|}]+)\|([^}]*)}}", rep, body)
 
+def video_schema(f):
+    base = f"https://www.{f['domain']}/video/garage-door-repair-{f['city_slug']}/"
+    obj = {"@context": "https://schema.org", "@type": "VideoObject",
+           "name": f"Garage door repair in {f['cityst']} - {f['business']}",
+           "description": f"Opener installation, torsion spring replacement, wall control programming and sectional and commercial door repairs by {f['business']} technicians serving {f['cityst']}.",
+           "thumbnailUrl": base + "poster.webp", "contentUrl": base + "garage-door-repair.mp4",
+           "uploadDate": datetime.date.today().isoformat(), "duration": "PT48S",
+           "publisher": {"@id": f"https://www.{f['domain']}/#business"}}
+    return '<script type="application/ld+json">' + json.dumps(obj) + "</script>"
+
+
 def gallery_schema(f):
     src = (T / "pages" / "gallery.html").read_text()
     items = []
@@ -332,7 +343,7 @@ def render_page(slug, f):
         "page_desc": htmlmod.escape(sub(desc, f), quote=True),
         "path": path,
         "content": expand_imgs(sub(body, f), f),
-        "schema_extra": (sub(FAQ_SCHEMA, f) if slug == "" else "") + (gallery_schema(f) if slug == "gallery" else "") + ('<meta name="robots" content="noindex">' if slug in ("thank-you", "404") else ""),
+        "schema_extra": (sub(FAQ_SCHEMA, f) + video_schema(f) if slug == "" else "") + (gallery_schema(f) if slug == "gallery" else "") + ('<meta name="robots" content="noindex">' if slug in ("thank-you", "404") else ""),
     })
     for k in NAV_KEYS:
         pf[f"cur_{k}"] = 'aria-current="page"' if k == nav_key else ""
@@ -409,6 +420,10 @@ def main():
     if shared.exists():
         shutil.rmtree(shared)
     shutil.copytree(T / "img", shared, ignore=shutil.ignore_patterns("meta.json"))
+    vid = OUT / "_shared" / "video"
+    if vid.exists():
+        shutil.rmtree(vid)
+    shutil.copytree(T / "video", vid)
     (OUT / "index.html").write_text('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/charlottegaragedoorrepair.net/">')
     print(f"built {n} site(s), {pages} pages, into {OUT}")
 
