@@ -8,6 +8,8 @@ Inputs:  template/base.html, template/pages/*.html, template/styles.css, data/lo
 Output:  sites/<domain>/...
 """
 import json, re, sys, datetime, shutil, html as htmlmod
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).parent))
+from suburbs import render_suburb, suburb_slug
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -234,6 +236,8 @@ def wiki_url(loc):
     return f"https://en.wikipedia.org/wiki/{city.title().replace(' ', '_')},_{state.replace(' ', '_')}"
 
 
+SUBURB_PAGES = 8
+
 def fields(loc):
     addr = loc["address"].strip()
     m = re.search(r",\s*([A-Z]{2})\s+\d{5}\s*$", addr)
@@ -260,7 +264,8 @@ def fields(loc):
         "year": str(datetime.date.today().year),
         "nearby_inline": ", ".join(nearby[:-1]) + (" and " + nearby[-1] if len(nearby) > 1 else (nearby[0] if nearby else "the surrounding area")),
         "nearby_short": ", ".join(nearby[:4]) if nearby else "the surrounding area",
-        "nearby_list": "\n      ".join(f"<li>{htmlmod.escape(n)}</li>" for n in nearby) or "<li>Surrounding communities</li>",
+        "nearby_list": "\n      ".join((f'<li><a href="/{suburb_slug(n)}/">{htmlmod.escape(n)}</a></li>' if i < SUBURB_PAGES else f"<li>{htmlmod.escape(n)}</li>") for i, n in enumerate(nearby)) or "<li>Surrounding communities</li>",
+        "nearby_inline_links": ", ".join(f'<a href="/{suburb_slug(n)}/">{htmlmod.escape(n)}</a>' for n in nearby[:SUBURB_PAGES]) + (", " + ", ".join(htmlmod.escape(n) for n in nearby[SUBURB_PAGES:-1]) + " and " + htmlmod.escape(nearby[-1]) if len(nearby) > SUBURB_PAGES else ""),
         "styles": STYLES.read_text().strip(),  # colors substituted later in sub()
         **palette_for(PALETTE_OF[loc["domain"]]),
         "favicon": "data:image/svg+xml," + MARK.format(signal=palette_for(PALETTE_OF[loc["domain"]])["c_signal"], signal2=mix(palette_for(PALETTE_OF[loc["domain"]])["c_signal"], "#000000", 0.12), ink=palette_for(PALETTE_OF[loc["domain"]])["c_ink"]).replace("#", "%23").replace("<", "%3C").replace(">", "%3E"),
@@ -362,6 +367,20 @@ def build_site(loc, today):
         target.write_text(out)
         if slug not in ("thank-you", "404"):
             urls.append(path)
+    for suburb in (loc.get("nearby") or [])[:SUBURB_PAGES]:
+        title, desc, body, schema = render_suburb(f, suburb)
+        path = f"/{suburb_slug(suburb)}/"
+        pf = dict(f)
+        pf.update({"page_title": htmlmod.escape(title, quote=True), "page_desc": htmlmod.escape(desc, quote=True), "path": path,
+                   "content": expand_imgs(sub(body, f), f), "schema_extra": schema})
+        for k in NAV_KEYS:
+            pf[f"cur_{k}"] = 'aria-current="page"' if k == "areas" else ""
+        out = sub(BASE, pf)
+        target = d / suburb_slug(suburb) / "index.html"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(out)
+        urls.append(path)
+        page_imgs[path] = [(src, alt) for src, alt in re.findall(r'<img src="([^"]+)"[^>]*alt="([^"]*)"', out)]
     (d / "robots.txt").write_text(ROBOTS.format(domain=f["domain"]))
     (d / "logo.svg").write_text(LOGO.format(city=htmlmod.escape(f["city"].upper()), since=f["since"], st=f["st"], cityc=htmlmod.escape(f["city"]), ink=f["c_ink"], signal=f["c_signal"], signal2=mix(f["c_signal"], "#000000", 0.12), mist=f["c_mist"]))
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">']
