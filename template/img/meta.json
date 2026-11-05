@@ -1,0 +1,86 @@
+{
+ "offtrack-door-evening": {
+  "w": 860,
+  "h": 573
+ },
+ "old-single-garage-door": {
+  "w": 1200,
+  "h": 800
+ },
+ "garage-door-windows-stucco": {
+  "w": 1200,
+  "h": 800
+ },
+ "wood-garage-door-brick": {
+  "w": 900,
+  "h": 600
+ },
+ "blue-commercial-rollup-door": {
+  "w": 900,
+  "h": 600
+ },
+ "carriage-garage-door-white": {
+  "w": 900,
+  "h": 600
+ },
+ "garage-door-windows-siding": {
+  "w": 900,
+  "h": 600
+ },
+ "wood-door-windows-brick": {
+  "w": 1200,
+  "h": 800
+ },
+ "carriage-door-brick-porch": {
+  "w": 1200,
+  "h": 800
+ },
+ "garage-door-tracks-inside": {
+  "w": 1200,
+  "h": 800
+ },
+ "new-steel-garage-door": {
+  "w": 1099,
+  "h": 732
+ },
+ "metal-building-rollup-door": {
+  "w": 900,
+  "h": 600
+ },
+ "carriage-garage-door-cream": {
+  "w": 1050,
+  "h": 700
+ },
+ "offtrack-door-crooked": {
+  "w": 1200,
+  "h": 800
+ },
+ "offtrack-door-bent-panels": {
+  "w": 1200,
+  "h": 800
+ },
+ "commercial-rollup-repair": {
+  "w": 1080,
+  "h": 720
+ },
+ "old-wood-garage-door": {
+  "w": 1200,
+  "h": 800
+ },
+ "old-sunburst-garage-door": {
+  "w": 930,
+  "h": 620
+ },
+ "opener-install": {
+  "w": 480,
+  "h": 320
+ },
+ "wall-control-button": {
+  "w": 480,
+  "h": 320
+ },
+ "brown-garage-door": {
+  "w": 480,
+  "h": 320
+ }
+}

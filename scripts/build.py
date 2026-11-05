@@ -274,6 +274,23 @@ def sub(text, f):
     return text
 
 
+IMG_META = json.loads((T / "img" / "meta.json").read_text())
+
+def img_tag(name, alt, cls="", eager=False):
+    m = IMG_META[name]
+    srcset = f"/img/{name}-600.webp 600w, /img/{name}.webp {m['w']}w" if m["w"] > 600 else f"/img/{name}.webp {m['w']}w"
+    sizes = "(max-width: 700px) 100vw, 600px"
+    lazy = "" if eager else ' loading="lazy" decoding="async"'
+    return (f'<img src="/img/{name}.webp" srcset="{srcset}" sizes="{sizes}" width="{m["w"]}" height="{m["h"]}" '
+            f'alt="{htmlmod.escape(alt, quote=True)}"{(" class=" + chr(34) + cls + chr(34)) if cls else ""}{lazy}>')
+
+def expand_imgs(body, f):
+    def rep(m):
+        name, alt = m.group(1), sub(m.group(2), f)
+        eager = name.startswith("!")
+        return img_tag(name.lstrip("!"), alt, eager=eager)
+    return re.sub(r"{{img:([^|}]+)\|([^}]*)}}", rep, body)
+
 def render_page(slug, f):
     tpl_name, nav_key = PAGES[slug]
     src = (T / "pages" / f"{tpl_name}.html").read_text()
@@ -286,7 +303,7 @@ def render_page(slug, f):
         "page_title": htmlmod.escape(sub(title, f), quote=True),
         "page_desc": htmlmod.escape(sub(desc, f), quote=True),
         "path": path,
-        "content": sub(body, f),
+        "content": expand_imgs(sub(body, f), f),
         "schema_extra": (sub(FAQ_SCHEMA, f) if slug == "" else "") + ('<meta name="robots" content="noindex">' if slug in ("thank-you", "404") else ""),
     })
     for k in NAV_KEYS:
@@ -340,6 +357,10 @@ def main():
         pages += build_site(loc, today)
         n += 1
     shutil.copy(T / "_worker.js", OUT / "_worker.js")
+    shared = OUT / "_shared" / "img"
+    if shared.exists():
+        shutil.rmtree(shared)
+    shutil.copytree(T / "img", shared, ignore=shutil.ignore_patterns("meta.json"))
     (OUT / "index.html").write_text('<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=/charlottegaragedoorrepair.net/">')
     print(f"built {n} site(s), {pages} pages, into {OUT}")
 
