@@ -1,0 +1,22 @@
+# One topic per line: slug | working title | angle. The scheduled blog task takes the FIRST line,
+# writes the post to template/blog/<slug>.html, then deletes the line. Add topics anytime.
+garage-door-opener-not-working | Garage Door Opener Not Working? Work Through These 7 Checks First | remote vs wall button, lockout mode, photo eyes, power, gear stripped, limit settings, when to call
+garage-door-cable-snapped | Garage Door Cable Snapped or Off the Drum: What Happens Next | why cables fail, door hangs crooked, why both cables get replaced, cost range, don't DIY under tension
+how-long-garage-door-springs-last | How Long Do Garage Door Springs Last? Cycle Life Explained | 10,000-cycle standard, high-cycle options, two-car vs single, signs they're wearing out, replacing both
+garage-door-safety-sensor-troubleshooting | Garage Door Closes a Few Inches Then Reverses: Safety Sensor Fixes | alignment, sunlight interference, wiring, LED codes, when the opener board is the problem
+garage-door-insulation-r-value | Does an Insulated Garage Door Pay Off? R-Values Explained | polystyrene vs polyurethane, R-6/12/18, attached vs detached, noise, resale
+garage-door-wind-rated-doors | Wind-Rated Garage Doors: Who Needs One and What It Costs | pressure ratings, reinforcement struts, codes in coastal states, retrofit braces
+garage-door-remote-not-working | Garage Door Remote Not Working: Battery, Reprogramming and Interference | battery, learn button, lock mode, LED bulbs interfering, replacing a lost remote and clearing memory
+garage-door-panel-replacement | Can You Replace One Garage Door Panel? Usually Yes, Here's When | matching discontinued panels, cost vs whole door, dents vs structural damage
+quiet-garage-door-upgrades | How to Make a Garage Door Quieter: Rollers, Belt Drive and Isolation | nylon rollers, belt opener, anti-vibration pads, lubrication, loose hardware
+garage-door-opener-horsepower | What Horsepower Garage Door Opener Do You Need? | door weight, ½ vs ¾ vs 1¼ HP, DC vs AC motors, soft start
+emergency-release-cord-explained | The Red Cord on Your Garage Door: How to Use It and How to Re-engage | power outage, manual mode, re-engaging, when not to pull it (broken spring)
+garage-door-weather-seal-replacement | Replacing the Bottom Seal on a Garage Door | T-style vs bulb, retainer types, measuring, pests and water, cost
+commercial-garage-door-maintenance | Commercial Roll-Up Door Maintenance Schedule for Small Businesses | spring cycles on high-use doors, planned maintenance, downtime cost, safety edges
+garage-door-opener-battery-backup | Battery Backup Openers: What They Do During a Power Outage | state requirements, run time, battery replacement interval, retrofitting
+garage-door-stuck-open | Garage Door Stuck Open: What to Do Tonight | security steps, manual close, why it happens, same-day repair
+new-garage-door-cost-guide | What a New Garage Door Costs in 2026: A Straight Price Guide | single vs double, steel vs wood vs composite, insulation, windows, install and haul-away
+garage-door-rollers-worn | Worn Garage Door Rollers: Symptoms and Replacement | steel vs nylon, ball bearings, noise, binding, 10-ball nylon upgrade
+smart-garage-door-opener-setup | Smart Garage Door Openers: Wi-Fi Control, Alerts and Package Delivery | myQ and Aladdin Connect, retrofit kits, what to watch for
+garage-door-hurricane-season-prep | Preparing Your Garage Door for Storm Season | bracing kits, checking tracks and hardware, what insurance looks for
+garage-door-track-bent | Bent Garage Door Track: Repair or Replace? | vehicle impact, straightening vs new section, alignment, rollers after a bend
