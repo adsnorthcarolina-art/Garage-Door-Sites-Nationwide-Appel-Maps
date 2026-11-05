@@ -14,7 +14,8 @@ export default {
     const site = isPagesDev ? DEFAULT : host;
     const assetUrl = new URL(request.url);
     // photos are shared by every site: /img/* -> /_shared/img/*
-    assetUrl.pathname = url.pathname.startsWith("/img/") ? "/_shared" + url.pathname : "/" + site + url.pathname;
+    const im = url.pathname.match(/^\/img\/[^/]+\/([^/]+\.webp)$/);
+    assetUrl.pathname = im ? "/_shared/img/" + im[1] : "/" + site + url.pathname;
     const res = await env.ASSETS.fetch(new Request(assetUrl.toString(), request));
     if (res.status === 404) {
       const nf = await env.ASSETS.fetch(new Request(new URL("/" + site + "/404.html", request.url).toString(), request));

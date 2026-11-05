@@ -10,7 +10,7 @@
 <meta property="og:title" content="Contact Phoenix Garage Door Repair - Phoenix, AZ 85004 | 602-848-6450">
 <meta property="og:description" content="Call Phoenix Garage Door Repair at 602-848-6450, 24 hours a day, for same-day garage door repair in Phoenix, AZ. Office: 112 N Central Ave, Suite 700D, Phoenix, AZ 85004.">
 <meta property="og:url" content="https://www.phoenixgaragedoorrepair.net/contact/">
-<meta property="og:image" content="https://www.phoenixgaragedoorrepair.net/img/new-steel-garage-door.webp">
+<meta property="og:image" content="https://www.phoenixgaragedoorrepair.net/img/garage-door-repair-phoenix-az/new-steel-garage-door.webp">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:site_name" content="Phoenix Garage Door Repair">
 <meta property="og:locale" content="en_US">
@@ -193,6 +193,17 @@ footer .legal{border-top:1px solid var(--ink3);padding-top:1rem;display:flex;fle
 .gallery figure{margin:0}
 .gallery img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block;border-radius:6px;background:var(--panel)}
 .gallery figcaption{font-size:.9rem;color:var(--steel);margin-top:.45rem}
+
+.gallery.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem}
+a.zoom{display:block;cursor:zoom-in}
+a.zoom img{transition:transform .2s}
+a.zoom:hover img{transform:scale(1.015)}
+.lightbox{border:0;padding:0;background:transparent;max-width:min(96vw,1200px);max-height:96vh}
+.lightbox::backdrop{background:rgba(10,12,16,.92)}
+.lightbox img{max-width:min(96vw,1200px);max-height:84vh;width:auto;height:auto;display:block;border-radius:6px}
+.lightbox p{color:#fff;text-align:center;margin:.75rem 0 0;font-size:.95rem}
+.lightbox .lb-close{position:absolute;top:-.25rem;right:-.25rem;background:#fff;border:0;border-radius:50%;width:36px;height:36px;font-size:1.4rem;cursor:pointer}
+@media (prefers-reduced-motion:reduce){a.zoom img{transition:none}}
 </style>
 <script type="application/ld+json">
 {
@@ -250,6 +261,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p class="group">Company</p>
   <a href="/service-areas/" >Service areas</a>
   <a href="/blog/" >Blog</a>
+  <a href="/gallery/" >Photo gallery</a>
   <a href="/about/" >About us</a>
   <a href="/contact/" aria-current="page">Contact</a>
   <a href="/#faq">Common questions</a>
@@ -269,7 +281,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section aria-labelledby="h2a">
   <div class="wrap two">
     <div class="contact">
-<figure class="photo"><img src="/img/wood-door-windows-brick.webp" srcset="/img/wood-door-windows-brick-600.webp 600w, /img/wood-door-windows-brick.webp 1200w" sizes="(max-width: 700px) 100vw, 600px" width="1200" height="800" alt="Wood garage door with windows on a brick home" loading="lazy" decoding="async"><figcaption>Repairs and new doors for every style, from classic wood to modern steel.</figcaption></figure>
+<figure class="photo"><a href="/img/garage-door-repair-phoenix-az/wood-door-windows-brick.webp" class="zoom" data-alt="Garage door repair in Phoenix, AZ - wood door with windows"><img src="/img/garage-door-repair-phoenix-az/wood-door-windows-brick.webp" srcset="/img/garage-door-repair-phoenix-az/wood-door-windows-brick-600.webp 600w, /img/garage-door-repair-phoenix-az/wood-door-windows-brick.webp 1200w" sizes="(max-width: 700px) 100vw, 600px" width="1200" height="800" alt="Garage door repair in Phoenix, AZ - wood door with windows" loading="lazy" decoding="async"></a><figcaption>Repairs and new doors for every style, from classic wood to modern steel.</figcaption></figure>
 
       <h2 id="h2a">Office</h2>
       <dl>
@@ -342,6 +354,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <li><a href="/about/">About us</a></li>
           <li><a href="/service-areas/">Service areas</a></li>
           <li><a href="/blog/">Blog</a></li>
+          <li><a href="/gallery/">Photo gallery</a></li>
           <li><a href="/contact/">Contact</a></li>
           <li><a href="/#faq">Common questions</a></li>
         </ul>
@@ -365,6 +378,12 @@ b.addEventListener('click',open);c.addEventListener('click',close);sc.addEventLi
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});})();
 </script>
 <div class="sticky"><a class="call" href="tel:+16028486450">Call 602-848-6450</a></div>
+<dialog class="lightbox" aria-label="Enlarged photo"><button type="button" class="lb-close" aria-label="Close">×</button><img alt=""><p></p></dialog>
+<script>
+(function(){var d=document.querySelector('.lightbox');if(!d||!d.showModal)return;var im=d.querySelector('img'),cap=d.querySelector('p');
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.zoom');if(!a)return;e.preventDefault();im.src=a.getAttribute('href');im.alt=a.dataset.alt||'';cap.textContent=(a.closest('figure')&&a.closest('figure').querySelector('figcaption')||{}).textContent||'';d.showModal();});
+d.addEventListener('click',function(e){if(e.target===d||e.target.classList.contains('lb-close'))d.close();});})();
+</script>
 <script>
 (function(){
   var dl=window.dataLayer=window.dataLayer||[];

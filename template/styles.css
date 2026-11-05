@@ -164,3 +164,14 @@ footer .legal{border-top:1px solid var(--ink3);padding-top:1rem;display:flex;fle
 .gallery figure{margin:0}
 .gallery img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block;border-radius:6px;background:var(--panel)}
 .gallery figcaption{font-size:.9rem;color:var(--steel);margin-top:.45rem}
+
+.gallery.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem}
+a.zoom{display:block;cursor:zoom-in}
+a.zoom img{transition:transform .2s}
+a.zoom:hover img{transform:scale(1.015)}
+.lightbox{border:0;padding:0;background:transparent;max-width:min(96vw,1200px);max-height:96vh}
+.lightbox::backdrop{background:rgba(10,12,16,.92)}
+.lightbox img{max-width:min(96vw,1200px);max-height:84vh;width:auto;height:auto;display:block;border-radius:6px}
+.lightbox p{color:#fff;text-align:center;margin:.75rem 0 0;font-size:.95rem}
+.lightbox .lb-close{position:absolute;top:-.25rem;right:-.25rem;background:#fff;border:0;border-radius:50%;width:36px;height:36px;font-size:1.4rem;cursor:pointer}
+@media (prefers-reduced-motion:reduce){a.zoom img{transition:none}}

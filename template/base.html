@@ -10,7 +10,7 @@
 <meta property="og:title" content="{{page_title}}">
 <meta property="og:description" content="{{page_desc}}">
 <meta property="og:url" content="https://www.{{domain}}{{path}}">
-<meta property="og:image" content="https://www.{{domain}}/img/new-steel-garage-door.webp">
+<meta property="og:image" content="https://www.{{domain}}/img/garage-door-repair-{{city_slug}}/new-steel-garage-door.webp">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:site_name" content="{{business}}">
 <meta property="og:locale" content="en_US">
@@ -85,6 +85,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p class="group">Company</p>
   <a href="/service-areas/" {{cur_areas}}>Service areas</a>
   <a href="/blog/" {{cur_blog}}>Blog</a>
+  <a href="/gallery/" {{cur_gallery}}>Photo gallery</a>
   <a href="/about/" {{cur_about}}>About us</a>
   <a href="/contact/" {{cur_contact}}>Contact</a>
   <a href="/#faq">Common questions</a>
@@ -124,6 +125,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <li><a href="/about/">About us</a></li>
           <li><a href="/service-areas/">Service areas</a></li>
           <li><a href="/blog/">Blog</a></li>
+          <li><a href="/gallery/">Photo gallery</a></li>
           <li><a href="/contact/">Contact</a></li>
           <li><a href="/#faq">Common questions</a></li>
         </ul>
@@ -147,6 +149,12 @@ b.addEventListener('click',open);c.addEventListener('click',close);sc.addEventLi
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});})();
 </script>
 <div class="sticky"><a class="call" href="tel:+1{{phone_digits}}">Call {{phone}}</a></div>
+<dialog class="lightbox" aria-label="Enlarged photo"><button type="button" class="lb-close" aria-label="Close">×</button><img alt=""><p></p></dialog>
+<script>
+(function(){var d=document.querySelector('.lightbox');if(!d||!d.showModal)return;var im=d.querySelector('img'),cap=d.querySelector('p');
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.zoom');if(!a)return;e.preventDefault();im.src=a.getAttribute('href');im.alt=a.dataset.alt||'';cap.textContent=(a.closest('figure')&&a.closest('figure').querySelector('figcaption')||{}).textContent||'';d.showModal();});
+d.addEventListener('click',function(e){if(e.target===d||e.target.classList.contains('lb-close'))d.close();});})();
+</script>
 <script>
 (function(){
   var dl=window.dataLayer=window.dataLayer||[];

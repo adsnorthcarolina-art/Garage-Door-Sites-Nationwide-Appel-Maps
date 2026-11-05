@@ -92,13 +92,14 @@ PAGES = {
     "new-garage-door-installation": ("newdoor", "newdoor"),
     "emergency-garage-door-repair": ("emergency", "emergency"),
     "service-areas": ("areas", "areas"),
+    "gallery": ("gallery", "gallery"),
     "about": ("about", "about"),
     "contact": ("contact", "contact"),
     "thank-you": ("thankyou", "contact"),
     "404": ("404", "home"),
 }
 FORM_KEY = (ROOT / "data" / "form_key.txt").read_text().strip() if (ROOT / "data" / "form_key.txt").exists() else "YOUR-WEB3FORMS-ACCESS-KEY"
-NAV_KEYS = ["home", "spring", "opener", "offtrack", "newdoor", "emergency", "areas", "blog", "about", "contact"]
+NAV_KEYS = ["home", "spring", "opener", "offtrack", "newdoor", "emergency", "areas", "blog", "gallery", "about", "contact"]
 
 FAQ_SCHEMA = """<script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -252,6 +253,7 @@ def fields(loc):
         "phone": phone,
         "phone_digits": re.sub(r"\D", "", phone),
         "cityst": ("Washington, DC" if city == "Washington DC" else f"{city}, {st}"),
+        "city_slug": re.sub(r"[^a-z0-9]+", "-", f"{city} {st}".lower()).strip("-"),
         "since": SINCE,
         "form_key": FORM_KEY,
         "wiki": wiki_url(loc),
@@ -276,20 +278,41 @@ def sub(text, f):
 
 IMG_META = json.loads((T / "img" / "meta.json").read_text())
 
-def img_tag(name, alt, cls="", eager=False):
+def img_dir(f):
+    return f"/img/garage-door-repair-{f['city_slug']}"
+
+def img_tag(name, alt, f, cls="", eager=False, link=False):
     m = IMG_META[name]
-    srcset = f"/img/{name}-600.webp 600w, /img/{name}.webp {m['w']}w" if m["w"] > 600 else f"/img/{name}.webp {m['w']}w"
+    d = img_dir(f)
+    srcset = f"{d}/{name}-600.webp 600w, {d}/{name}.webp {m['w']}w" if m["w"] > 600 else f"{d}/{name}.webp {m['w']}w"
     sizes = "(max-width: 700px) 100vw, 600px"
     lazy = "" if eager else ' loading="lazy" decoding="async"'
-    return (f'<img src="/img/{name}.webp" srcset="{srcset}" sizes="{sizes}" width="{m["w"]}" height="{m["h"]}" '
-            f'alt="{htmlmod.escape(alt, quote=True)}"{(" class=" + chr(34) + cls + chr(34)) if cls else ""}{lazy}>')
+    tag = (f'<img src="{d}/{name}.webp" srcset="{srcset}" sizes="{sizes}" width="{m["w"]}" height="{m["h"]}" '
+           f'alt="{htmlmod.escape(alt, quote=True)}"{(" class=" + chr(34) + cls + chr(34)) if cls else ""}{lazy}>')
+    if link:
+        tag = f'<a href="{d}/{name}.webp" class="zoom" data-alt="{htmlmod.escape(alt, quote=True)}">{tag}</a>'
+    return tag
 
 def expand_imgs(body, f):
     def rep(m):
         name, alt = m.group(1), sub(m.group(2), f)
         eager = name.startswith("!")
-        return img_tag(name.lstrip("!"), alt, eager=eager)
+        link = name.startswith("+")
+        return img_tag(name.lstrip("!+"), alt, f, eager=eager, link=link)
     return re.sub(r"{{img:([^|}]+)\|([^}]*)}}", rep, body)
+
+def gallery_schema(f):
+    src = (T / "pages" / "gallery.html").read_text()
+    items = []
+    for name, alt in re.findall(r"{{img:\+([^|}]+)\|([^}]*)}}", src):
+        m = IMG_META[name]
+        items.append({"@type": "ImageObject", "contentUrl": f"https://www.{f['domain']}{img_dir(f)}/{name}.webp",
+                      "name": sub(alt, f), "width": m["w"], "height": m["h"],
+                      "contentLocation": {"@type": "Place", "name": f["cityst"]},
+                      "creator": {"@type": "Organization", "name": f["business"]}})
+    data = {"@context": "https://schema.org", "@type": "ImageGallery", "name": f"Garage door repair photos - {f['cityst']}",
+            "url": f"https://www.{f['domain']}/gallery/", "about": {"@id": f"https://www.{f['domain']}/#business"}, "image": items}
+    return '<script type="application/ld+json">' + json.dumps(data) + "</script>"
 
 def render_page(slug, f):
     tpl_name, nav_key = PAGES[slug]
@@ -304,7 +327,7 @@ def render_page(slug, f):
         "page_desc": htmlmod.escape(sub(desc, f), quote=True),
         "path": path,
         "content": expand_imgs(sub(body, f), f),
-        "schema_extra": (sub(FAQ_SCHEMA, f) if slug == "" else "") + ('<meta name="robots" content="noindex">' if slug in ("thank-you", "404") else ""),
+        "schema_extra": (sub(FAQ_SCHEMA, f) if slug == "" else "") + (gallery_schema(f) if slug == "gallery" else "") + ('<meta name="robots" content="noindex">' if slug in ("thank-you", "404") else ""),
     })
     for k in NAV_KEYS:
         pf[f"cur_{k}"] = 'aria-current="page"' if k == nav_key else ""
@@ -330,8 +353,10 @@ def build_site(loc, today):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(out)
         urls.append(path)
+    page_imgs = {}
     for slug in PAGES:
         path, out = render_page(slug, f)
+        page_imgs[path] = [(src, alt) for src, alt in re.findall(r'<img src="([^"]+)"[^>]*alt="([^"]*)"', out)]
         target = d / "404.html" if slug == "404" else (d / slug / "index.html" if slug else d / "index.html")
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(out)
@@ -339,9 +364,10 @@ def build_site(loc, today):
             urls.append(path)
     (d / "robots.txt").write_text(ROBOTS.format(domain=f["domain"]))
     (d / "logo.svg").write_text(LOGO.format(city=htmlmod.escape(f["city"].upper()), since=f["since"], st=f["st"], cityc=htmlmod.escape(f["city"]), ink=f["c_ink"], signal=f["c_signal"], signal2=mix(f["c_signal"], "#000000", 0.12), mist=f["c_mist"]))
-    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">']
     for u in urls:
-        sm.append(f"  <url><loc>https://www.{f['domain']}{u}</loc><lastmod>{today}</lastmod></url>")
+        imgs = "".join(f"<image:image><image:loc>https://www.{f['domain']}{src}</image:loc><image:title>{alt}</image:title></image:image>" for src, alt in page_imgs.get(u, []))
+        sm.append(f"  <url><loc>https://www.{f['domain']}{u}</loc><lastmod>{today}</lastmod>{imgs}</url>")
     sm.append("</urlset>")
     (d / "sitemap.xml").write_text("\n".join(sm) + "\n")
     return len(urls)

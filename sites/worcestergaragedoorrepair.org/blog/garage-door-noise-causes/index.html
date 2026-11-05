@@ -10,7 +10,7 @@
 <meta property="og:title" content="Why Is My Garage Door So Loud? What Each Noise Means - Worcester, MA | Worcester Garage Door Repair">
 <meta property="og:description" content="Grinding, squealing, popping, rattling, banging — each garage door noise points to a specific part. A quick diagnosis guide from Worcester Garage Door Repair.">
 <meta property="og:url" content="https://www.worcestergaragedoorrepair.org/blog/garage-door-noise-causes/">
-<meta property="og:image" content="https://www.worcestergaragedoorrepair.org/img/new-steel-garage-door.webp">
+<meta property="og:image" content="https://www.worcestergaragedoorrepair.org/img/garage-door-repair-worcester-ma/new-steel-garage-door.webp">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:site_name" content="Worcester Garage Door Repair">
 <meta property="og:locale" content="en_US">
@@ -193,6 +193,17 @@ footer .legal{border-top:1px solid var(--ink3);padding-top:1rem;display:flex;fle
 .gallery figure{margin:0}
 .gallery img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block;border-radius:6px;background:var(--panel)}
 .gallery figcaption{font-size:.9rem;color:var(--steel);margin-top:.45rem}
+
+.gallery.big{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem}
+a.zoom{display:block;cursor:zoom-in}
+a.zoom img{transition:transform .2s}
+a.zoom:hover img{transform:scale(1.015)}
+.lightbox{border:0;padding:0;background:transparent;max-width:min(96vw,1200px);max-height:96vh}
+.lightbox::backdrop{background:rgba(10,12,16,.92)}
+.lightbox img{max-width:min(96vw,1200px);max-height:84vh;width:auto;height:auto;display:block;border-radius:6px}
+.lightbox p{color:#fff;text-align:center;margin:.75rem 0 0;font-size:.95rem}
+.lightbox .lb-close{position:absolute;top:-.25rem;right:-.25rem;background:#fff;border:0;border-radius:50%;width:36px;height:36px;font-size:1.4rem;cursor:pointer}
+@media (prefers-reduced-motion:reduce){a.zoom img{transition:none}}
 </style>
 <script type="application/ld+json">
 {
@@ -252,6 +263,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p class="group">Company</p>
   <a href="/service-areas/" >Service areas</a>
   <a href="/blog/" aria-current="page">Blog</a>
+  <a href="/gallery/" >Photo gallery</a>
   <a href="/about/" >About us</a>
   <a href="/contact/" >Contact</a>
   <a href="/#faq">Common questions</a>
@@ -333,6 +345,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <li><a href="/about/">About us</a></li>
           <li><a href="/service-areas/">Service areas</a></li>
           <li><a href="/blog/">Blog</a></li>
+          <li><a href="/gallery/">Photo gallery</a></li>
           <li><a href="/contact/">Contact</a></li>
           <li><a href="/#faq">Common questions</a></li>
         </ul>
@@ -356,6 +369,12 @@ b.addEventListener('click',open);c.addEventListener('click',close);sc.addEventLi
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});})();
 </script>
 <div class="sticky"><a class="call" href="tel:+15086925985">Call 508-692-5985</a></div>
+<dialog class="lightbox" aria-label="Enlarged photo"><button type="button" class="lb-close" aria-label="Close">×</button><img alt=""><p></p></dialog>
+<script>
+(function(){var d=document.querySelector('.lightbox');if(!d||!d.showModal)return;var im=d.querySelector('img'),cap=d.querySelector('p');
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.zoom');if(!a)return;e.preventDefault();im.src=a.getAttribute('href');im.alt=a.dataset.alt||'';cap.textContent=(a.closest('figure')&&a.closest('figure').querySelector('figcaption')||{}).textContent||'';d.showModal();});
+d.addEventListener('click',function(e){if(e.target===d||e.target.classList.contains('lb-close'))d.close();});})();
+</script>
 <script>
 (function(){
   var dl=window.dataLayer=window.dataLayer||[];
