@@ -382,6 +382,9 @@ def build_site(loc, today):
         urls.append(path)
         page_imgs[path] = [(src, alt) for src, alt in re.findall(r'<img src="([^"]+)"[^>]*alt="([^"]*)"', out)]
     (d / "robots.txt").write_text(ROBOTS.format(domain=f["domain"]))
+    brand = T / "brand" / f["domain"]
+    if brand.exists():
+        shutil.copytree(brand, d / "brand", dirs_exist_ok=True)
     (d / "logo.svg").write_text(LOGO.format(city=htmlmod.escape(f["city"].upper()), since=f["since"], st=f["st"], cityc=htmlmod.escape(f["city"]), ink=f["c_ink"], signal=f["c_signal"], signal2=mix(f["c_signal"], "#000000", 0.12), mist=f["c_mist"]))
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">']
     for u in urls:
