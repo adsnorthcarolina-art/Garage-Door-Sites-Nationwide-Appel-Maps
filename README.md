@@ -29,14 +29,15 @@ that deploy the same repo.
 
 Deployed on Cloudflare Pages: project `garage-door-sites-nationwide-appel-maps`.
 
-## Two Cloudflare Pages projects
+## Three Cloudflare Pages projects
 
 Cloudflare Pages allows 100 custom domains per project, and one GitHub repo can only be
-connected to one Pages project. So the same code lives in two GitHub repos:
+connected to one Pages project. So the same code lives in three GitHub repos:
 
-- `Garage-Door-Sites-Nationwide-Appel-Maps` → Pages project `garage-door-sites-nationwide-appel-maps` (sites 1–50)
-- `Garage-Door-Sites-Part-2` → Pages project `garage-door-sites-part-2` (sites 51+)
+- `Garage-Door-Sites-Nationwide-Appel-Maps` → Pages project `garage-door-sites-nationwide-appel-maps` (50 sites)
+- `Garage-Door-Sites-Part-2` → Pages project `garage-door-sites-part-2` (50 sites)
+- `Garage-Door-Sites-Part-3` → Pages project `garage-door-sites-part-3` (remaining sites)
 
-After any change, push to both remotes so both projects rebuild:
+After any change, push to all three remotes so all projects rebuild:
 
-    git push origin main && git push part2 main
+    git push origin main && git push part2 main && git push part3 main
