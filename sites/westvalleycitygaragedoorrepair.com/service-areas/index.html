@@ -327,5 +327,15 @@ b.addEventListener('click',open);c.addEventListener('click',close);sc.addEventLi
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!m.hidden)close()});})();
 </script>
 <div class="sticky"><a class="call" href="tel:+18017028415">Call 801-702-8415</a></div>
+<script>
+(function(){
+  var dl=window.dataLayer=window.dataLayer||[];
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href^="tel:"]');
+    if(a){dl.push({event:'phone_call',phone_number:a.getAttribute('href').replace('tel:',''),site_host:location.hostname});}
+  });
+  if(location.pathname.indexOf('/thank-you')===0){dl.push({event:'lead_form_submit',site_host:location.hostname});}
+})();
+</script>
 </body>
 </html>
