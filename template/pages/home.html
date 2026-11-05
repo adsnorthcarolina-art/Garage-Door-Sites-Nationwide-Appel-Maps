@@ -117,7 +117,7 @@
         <input type="hidden" name="from_name" value="{{business}} website">
         <input type="hidden" name="site" value="{{domain}}">
         <input type="hidden" name="redirect" value="https://www.{{domain}}/thank-you/">
-        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this unchecked">
         <label>Your name<input type="text" name="name" required autocomplete="name"></label>
         <label>Phone<input type="tel" name="phone" required autocomplete="tel" inputmode="tel"></label>
         <label>Address or neighborhood in {{city}}<input type="text" name="address" autocomplete="street-address"></label>
