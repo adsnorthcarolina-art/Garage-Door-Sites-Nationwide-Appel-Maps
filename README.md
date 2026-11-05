@@ -28,3 +28,15 @@ Free plan allows 100 custom domains per project, so the 109 domains are split ac
 that deploy the same repo.
 
 Deployed on Cloudflare Pages: project `garage-door-sites-nationwide-appel-maps`.
+
+## Two Cloudflare Pages projects
+
+Cloudflare Pages allows 100 custom domains per project, and one GitHub repo can only be
+connected to one Pages project. So the same code lives in two GitHub repos:
+
+- `Garage-Door-Sites-Nationwide-Appel-Maps` → Pages project `garage-door-sites-nationwide-appel-maps` (sites 1–50)
+- `Garage-Door-Sites-Part-2` → Pages project `garage-door-sites-part-2` (sites 51+)
+
+After any change, push to both remotes so both projects rebuild:
+
+    git push origin main && git push part2 main
